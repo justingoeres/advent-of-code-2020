@@ -34,8 +34,7 @@ public class Day01Service {
         int largerNum = 0;
         int sum = 0;
         // Work from the front and back to find the two items that sum to the target
-        boolean found = false;
-        while (!found) {
+        while (true) {
             smallerNum = inputList.get(i);
             largerNum = inputList.get(j);
 
@@ -72,32 +71,43 @@ public class Day01Service {
         int i;
         int j;
         int k;
-        int smallNum = 0;
-        int middleNum = 0;
-        int largeNum = 0;
-        int sum = 0;
+        int smallNum;
+        int middleNum;
+        int largeNum;
+        int sum;
 
-        boolean found = false;
-        all:
-        for (i = 0; i < inputList.size() - 2; i++) { // -2 because j & k will get to the end of inputList; i will not
-            for (j = 1; j < inputList.size() - 1; j++) { // -1 because k will get to the end of inputList; j will not
-                for (k = inputList.size() - 1; k > j; k--) {
-                    smallNum = inputList.get(i);
-                    middleNum = inputList.get(j);
-                    largeNum = inputList.get(k);
+        int iteration = 0;
 
-                    sum = smallNum + middleNum + largeNum;
+        i = 0;
+        j = 1;
+        k = inputList.size() - 1;
+        while (true) {
+            if (j == k) {
+                // If j & k have met in the middle with no solution, increment i and start over
+                i++;
+                j = i + 1;
+                k = inputList.size() - 1;
+            }
+            smallNum = inputList.get(i);    // get the small number
+            // Iterate the middle & large numbers in from both ends
+            middleNum = inputList.get(j);
+            largeNum = inputList.get(k);
 
-                    if (DEBUG) System.out.println(smallNum + " + " + middleNum + " + " + largeNum + " = " + sum);
+            // Look for j & k to make a sum that adds up to (2020 - smallNum)
+            int subTarget = targetSum - smallNum;
+            sum = middleNum + largeNum;
 
-                    if (sum == targetSum) {
-                        // we found it! Bail out completely
-                        break all;
-                    } else if (sum < targetSum) {
-                        // we undershot the target, go to the next j and start again
-                        break;
-                    }
-                }
+            if (DEBUG) System.out.println(smallNum + " + " + middleNum + " + " + largeNum + " = " + sum);
+
+            if (sum == subTarget) {
+                // We found it!
+                break;
+            } else if (sum > subTarget) {
+                // If we're greater than targetSum, then move the LARGER number down.
+                k--;
+            } else if (sum < subTarget) {
+                // If we're under the targetSum, move the SMALLER number up.
+                j++;
             }
         }
 
