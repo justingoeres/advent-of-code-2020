@@ -1,6 +1,6 @@
 package org.jgoeres.adventofcode2020;
 
-import org.jgoeres.adventofcode2020.DayXX.RunDayXX;
+import org.jgoeres.adventofcode2020.Day01.RunDay01;
 
 /**
  * Hello world!
@@ -8,7 +8,7 @@ import org.jgoeres.adventofcode2020.DayXX.RunDayXX;
 public class App {
     static final boolean RUN_ALL = false;
 
-    static final boolean RUN_DAY_1 = false;
+    static final boolean RUN_DAY_1 = true;
     static final boolean RUN_DAY_2 = false;
     static final boolean RUN_DAY_3 = false;
     static final boolean RUN_DAY_4 = false;
@@ -41,16 +41,16 @@ public class App {
         //https://adventofcode.com/2019/
 
         if (RUN_DAY_1 || RUN_ALL) {
-//             Day XXA
+//             Day 01A
             setStartTime();
-            RunDayXX.problemXXA();
+            RunDay01.problem01A();
             printElapsedTime();
 
             blankLine();
 
-//            Day XXB
+//            Day 01B
             setStartTime();
-            RunDayXX.problemXXB();
+            RunDay01.problem01B();
             printElapsedTime();
 
             blankLine();
