@@ -61,6 +61,53 @@ public class Day01Service {
         return result;
     }
 
+    public int calculateMissingExpenseThreeArguments(int targetSum) {
+        // Find the THREE entries that sum to 2020
+        int result;
+
+        // inputList is probably already sorted because we just ran problem A,
+        // but sort it here just in case.
+        Collections.sort(inputList);
+
+        int i;
+        int j;
+        int k;
+        int smallNum = 0;
+        int middleNum = 0;
+        int largeNum = 0;
+        int sum = 0;
+
+        boolean found = false;
+        all:
+        for (i = 0; i < inputList.size() - 2; i++) { // -2 because j & k will get to the end of inputList; i will not
+            for (j = 1; j < inputList.size() - 1; j++) { // -1 because k will get to the end of inputList; j will not
+                for (k = inputList.size() - 1; k > j; k--) {
+                    smallNum = inputList.get(i);
+                    middleNum = inputList.get(j);
+                    largeNum = inputList.get(k);
+
+                    sum = smallNum + middleNum + largeNum;
+
+                    if (DEBUG) System.out.println(smallNum + " + " + middleNum + " + " + largeNum + " = " + sum);
+
+                    if (sum == targetSum) {
+                        // we found it! Bail out completely
+                        break all;
+                    } else if (sum < targetSum) {
+                        // we undershot the target, go to the next j and start again
+                        break;
+                    }
+                }
+            }
+        }
+
+        System.out.println("Found result:");
+        System.out.println("\t" + smallNum + " + " + middleNum + " + " + largeNum + " = " + sum);
+        // Now that we have the target numbers, just multiply them.
+        result = smallNum * middleNum * largeNum;
+        System.out.println("\t" + smallNum + " * " + middleNum + " * " + largeNum + " = " + result);
+        return result;
+    }
 
     private void loadInputs(String pathToFile) {
         inputList.clear();

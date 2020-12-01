@@ -10,7 +10,6 @@ public abstract class RunDay01 {
     static final int TARGET = 2020;
 
     public static int problem01A() {
-        // Day XXA
         System.out.println("=== DAY " + DAY + "A ===");
 
         int result = day01Service.calculateMissingExpense(TARGET);
@@ -24,10 +23,9 @@ public abstract class RunDay01 {
     }
 
     public static int problem01B() {
-        // Day XXB
         System.out.println("=== DAY " + DAY + "B ===");
 
-        int result = 0;
+        int result = day01Service.calculateMissingExpenseThreeArguments(TARGET);
 
         System.out.println("Day " + DAY + "B: Answer = " + result);
 
