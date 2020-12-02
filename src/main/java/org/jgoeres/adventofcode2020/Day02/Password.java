@@ -8,6 +8,8 @@ public class Password {
     int minOccurrences;
     int maxOccurrences;
     char requiredLetter;
+    int firstPosition;  // for Part B
+    int secondPosition; // for Part B
     String password;
 
     public Password(int minOccurrences, int maxOccurrences, char requiredLetter, String password) {
@@ -15,9 +17,14 @@ public class Password {
         this.maxOccurrences = maxOccurrences;
         this.requiredLetter = requiredLetter;
         this.password = password;
+
+        // for Part B
+        this.setFirstPosition(this.getMinOccurrences());
+        this.setSecondPosition(this.getMaxOccurrences());
     }
 
     public Password(String encodedPassword) {
+        // PART A
         // For example, suppose you have the following list:
         //
         //1-3 a: abcde
@@ -30,7 +37,15 @@ public class Password {
         // For example, 1-3 a means that the password must contain 'a'
         // at least 1 time and at most 3 times.
 
-//        String pattern = "(.*)(\\d+)(.*)";
+        // PART B
+        // Each policy actually describes two positions in the password, where 1 means the first character, 2 means the second character, and so on. (Be careful; Toboggan Corporate Policies have no concept of "index zero"!) Exactly one of these positions must contain the given letter. Other occurrences of the letter are irrelevant for the purposes of policy enforcement.
+        //
+        // Given the same example list from above:
+        //
+        // 1-3 a: abcde is valid: position 1 contains a and position 3 does not.
+        // 1-3 b: cdefg is invalid: neither position 1 nor position 3 contains b.
+        // 2-9 c: ccccccccc is invalid: both position 2 and position 9 contain c.
+
         String pattern = "(\\d+)-(\\d+) ([a-z]): (\\w+)";
 
         // Create a Pattern object
@@ -47,15 +62,17 @@ public class Password {
             this.setMaxOccurrences(Integer.parseInt(m.group(2)));
             this.setRequiredLetter(m.group(3).charAt(0));
             this.setPassword(m.group(4));
+
+            // for Part B
+            this.setFirstPosition(this.getMinOccurrences() - 1);    // indexing starts a 1 per problem description
+            this.setSecondPosition(this.getMaxOccurrences() - 1);
         } else {
             System.out.println("NO MATCH");
         }
-        this.password = password;
     }
 
-    public boolean isValid() {
-        // Return TRUE if this password is valid
-
+    public boolean isValidPartA() {
+        // Return TRUE if this password is valid according to Part B
         // Turn the password into a stream of characters
         Stream<Character> characterStream = getPassword().chars().mapToObj(c -> (char) c);
 
@@ -63,6 +80,20 @@ public class Password {
         long count = characterStream.filter(c -> c == getRequiredLetter()).count();
 
         boolean valid = (count >= minOccurrences && count <= maxOccurrences);
+
+        return valid;
+    }
+
+    public boolean isValidPartB() {
+        // Return TRUE if this password is valid according to Part B
+        boolean firstMatch = false;
+        boolean secondMatch = false;
+
+        firstMatch = getPassword().charAt(getFirstPosition()) == getRequiredLetter();
+        secondMatch = getPassword().charAt(getSecondPosition()) == getRequiredLetter();
+
+        // EXACTLY ONE of the matches must be true.
+        boolean valid = firstMatch ^ secondMatch;
 
         return valid;
     }
@@ -97,5 +128,21 @@ public class Password {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getFirstPosition() {
+        return firstPosition;
+    }
+
+    public void setFirstPosition(int firstPosition) {
+        this.firstPosition = firstPosition;
+    }
+
+    public int getSecondPosition() {
+        return secondPosition;
+    }
+
+    public void setSecondPosition(int secondPosition) {
+        this.secondPosition = secondPosition;
     }
 }

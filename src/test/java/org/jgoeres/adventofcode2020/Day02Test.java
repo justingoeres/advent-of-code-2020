@@ -18,14 +18,14 @@ public class Day02Test {
         Assert.assertEquals(580, result);
     }
 
-//    @Test
-//    public void Day02B() {
-//        int result = 0;
-//        try {
-//            result = RunDay02.problem02B();
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
-//        Assert.assertEquals(0, result);
-//    }
+    @Test
+    public void Day02B() {
+        long result = 0;
+        try {
+            result = RunDay02.problem02B();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(611, result);
+    }
 }

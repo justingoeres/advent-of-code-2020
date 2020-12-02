@@ -19,11 +19,16 @@ public class Day02Service {
         loadInputs(pathToFile);
     }
 
-    public long countValidPasswords() {
-
+    public long countValidPasswordsPartA() {
         Stream<Password> passwordStream = inputList.stream();
+        long countValid = passwordStream.filter(password -> password.isValidPartA()).count();
 
-        long countValid = passwordStream.filter(password -> password.isValid()).count();
+        return countValid;
+    }
+
+    public long countValidPasswordsPartB() {
+        Stream<Password> passwordStream = inputList.stream();
+        long countValid = passwordStream.filter(password -> password.isValidPartB()).count();
 
         return countValid;
     }

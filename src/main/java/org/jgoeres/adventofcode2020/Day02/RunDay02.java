@@ -11,7 +11,7 @@ public abstract class RunDay02 {
         // Day 02A
         System.out.println("=== DAY " + DAY + "A ===");
 
-        long result = day02Service.countValidPasswords();
+        long result = day02Service.countValidPasswordsPartA();
 
         System.out.println("Day " + DAY + "A: Number of valid passwords = " + result);
 
@@ -21,13 +21,14 @@ public abstract class RunDay02 {
         return result;
     }
 
-    public static int problem02B() {
+    public static long problem02B() {
         // Day 02B
         System.out.println("=== DAY " + DAY + "B ===");
 
-        int result = 0;
+        long result = day02Service.countValidPasswordsPartB();
 
-        System.out.println("Day " + DAY + "B: Answer = " + result);
+        System.out.println("Day " + DAY + "B: Number of valid passwords = " + result);
+// 443 too low
 
 //        Day 02B: Answer =
 //        Time elapsed:	xxx ms
