@@ -64,7 +64,7 @@ public class Password {
             this.setPassword(m.group(4));
 
             // for Part B
-            this.setFirstPosition(this.getMinOccurrences() - 1);    // indexing starts a 1 per problem description
+            this.setFirstPosition(this.getMinOccurrences() - 1);    // indexing starts at 1 per problem description
             this.setSecondPosition(this.getMaxOccurrences() - 1);
         } else {
             System.out.println("NO MATCH");
@@ -72,7 +72,7 @@ public class Password {
     }
 
     public boolean isValidPartA() {
-        // Return TRUE if this password is valid according to Part B
+        // Return TRUE if this password is valid according to Part A
         // Turn the password into a stream of characters
         Stream<Character> characterStream = getPassword().chars().mapToObj(c -> (char) c);
 
