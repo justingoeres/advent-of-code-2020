@@ -11,7 +11,7 @@ public class DayXXTest {
 //    public void DayXXA() {
 //        int result = 0;
 //        try {
-//            result = RunDayXX.problemXXA();
+//            result = RunDay02.problemXXA();
 //        } catch (Exception e) {
 //            System.out.println(e.getMessage());
 //        }
@@ -22,7 +22,7 @@ public class DayXXTest {
 //    public void DayXXB() {
 //        int result = 0;
 //        try {
-//            result = RunDayXX.problemXXB();
+//            result = RunDay02.problemXXB();
 //        } catch (Exception e) {
 //            System.out.println(e.getMessage());
 //        }

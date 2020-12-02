@@ -1,6 +1,7 @@
 package org.jgoeres.adventofcode2020;
 
 import org.jgoeres.adventofcode2020.Day01.RunDay01;
+import org.jgoeres.adventofcode2020.Day02.RunDay02;
 
 /**
  * Hello world!
@@ -8,8 +9,8 @@ import org.jgoeres.adventofcode2020.Day01.RunDay01;
 public class App {
     static final boolean RUN_ALL = false;
 
-    static final boolean RUN_DAY_1 = true;
-    static final boolean RUN_DAY_2 = false;
+    static final boolean RUN_DAY_1 = false;
+    static final boolean RUN_DAY_2 = true;
     static final boolean RUN_DAY_3 = false;
     static final boolean RUN_DAY_4 = false;
     static final boolean RUN_DAY_5 = false;
@@ -56,6 +57,21 @@ public class App {
             blankLine();
         }
 
+        if (RUN_DAY_2 || RUN_ALL) {
+//             Day 02A
+            setStartTime();
+            RunDay02.problem02A();
+            printElapsedTime();
+
+            blankLine();
+
+//            Day 02B
+            setStartTime();
+            RunDay02.problem02B();
+            printElapsedTime();
+
+            blankLine();
+        }
         System.out.println("\n\nTOTAL ELAPSED TIME:\t" + totalElapsed + " ms");
     }
 
