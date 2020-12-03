@@ -7,6 +7,7 @@ public abstract class RunDay03 {
     public static int problem03A() {
         System.out.println("=== DAY 03A ===");
 
+        // How many trees do we hit going on slope 3 RIGHT / 1 DOWN?
         int result = tobogganService.doPartA();
 
         System.out.println("Day 03A: Number of Trees Hit = " + result);
@@ -17,12 +18,12 @@ public abstract class RunDay03 {
         return result;
     }
 
-    public static int problem03B() {
+    public static long problem03B() {
         System.out.println("=== DAY 03B ===");
 
-        int result = tobogganService.doPartB();
+        long result = tobogganService.doPartB();
 
-        System.out.println("Day 03B: Answer = " + result);
+        System.out.println("Day 03B: Number of Trees Hit, all multiplied together = " + result);
 
 //        Day {$AOC_DAY}B: Answer =
 //        Time elapsed:	xxx ms
