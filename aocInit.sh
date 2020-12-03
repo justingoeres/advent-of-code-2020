@@ -24,6 +24,7 @@ set -o pipefail         # Use last non-zero exit code in a pipeline
 function script_usage() {
     cat << EOF
 Usage:
+     -d|--day                   Specifies the AoC day # to create
      -h|--help                  Displays this help
      -v|--verbose               Displays verbose output
     -nc|--no-colour             Disables colour output
@@ -40,6 +41,15 @@ function parse_params() {
         param="$1"
         shift
         case $param in
+            -d | --day)
+                raw_day="$1"    # Pretty version of the day for e.g. git commits
+                day="$1"
+                # Add leading zero if necessary
+                if [ "$day" -lt "10" ]; then
+                    day=0$day
+                fi
+                shift   # consume the number after -d
+                ;;
             -h | --help)
                 script_usage
                 exit 0
@@ -60,6 +70,21 @@ function parse_params() {
     done
 }
 
+function instantiateTemplate() {
+    sourceFile="$1"
+    targetFile="$2"
+    targetDir=$( dirname "$2" )
+
+    pretty_print "Instantiating $(basename "$sourceFile") as $(basename "$outputFile1")" $fg_cyan$ta_bold
+
+    # Make sure the targetDir exists
+    mkdir -p $targetDir
+
+    # Replace all instances of ${AOC_DAY} with $day
+    # and write the modified file out to $targetFile
+    sed "s/\${AOC_DAY}/$day/g" $sourceFile > $targetFile
+}
+
 # DESC: Main control flow
 # ARGS: $@ (optional): Arguments provided to the script
 # OUTS: None
@@ -75,6 +100,33 @@ function main() {
     cron_init
     colour_init
     #lock_init system
+
+    YEAR=2020
+    srcDir=src/main/java/org/jgoeres/adventofcode$YEAR/Day$day
+    testDir=src/test/java/org/jgoeres/adventofcode$YEAR
+
+    templateDir=resources/templates 
+    
+    # RunDayXXTemplate.java
+    templateFile1=RunDayXXTemplate.java
+    outputFile1=${templateFile1/XXTemplate/$day}  # e.g. RunDayXXTemplate.java -> RunDay01Template.java
+    instantiateTemplate "$templateDir/$templateFile1" "$srcDir/$outputFile1"
+
+    # DayXXServiceTemplate.java
+    templateFile2=DayXXServiceTemplate.java
+    outputFile2=${templateFile2/XXServiceTemplate/"$day"Service}  # e.g. RunDayXXTemplate.java -> RunDay01Template.java
+    instantiateTemplate "$templateDir/$templateFile2" "$srcDir/$outputFile2"
+
+    # DayXXTestTemplate.java
+    templateFile3=DayXXTestTemplate.java
+    outputFile3=${templateFile3/XXTestTemplate/"$day"Test}  # e.g. RunDayXXTemplate.java -> RunDay01Template.java
+    instantiateTemplate "$templateDir/$templateFile3" "$testDir/$outputFile3"
+
+    # Commit everything
+    pretty_print "Committing..." $fg_yellow$ta_bold
+    git add "$srcDir/$outputFile1" "$srcDir/$outputFile2" "$testDir/$outputFile3"
+    git commit -m "Day $raw_day Init from aocInit.sh"
+
 }
 
 # Make it rain
