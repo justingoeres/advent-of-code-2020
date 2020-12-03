@@ -13,7 +13,7 @@ public class Day03Test {
        } catch (Exception e) {
            System.out.println(e.getMessage());
        }
-       Assert.assertEquals(0, result);
+       Assert.assertEquals(151, result);
    }
 
    @Test

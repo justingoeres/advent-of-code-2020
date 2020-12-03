@@ -56,6 +56,25 @@ public class XYPoint {
         return null;
     }
 
+    public void moveRelative(int numSteps, DirectionURDL directionURDL) {
+        switch (directionURDL) {
+            case UP:
+                // Default negative-Y direction is UP
+                setY(y - numSteps);
+                break;
+            case RIGHT:
+                setX(x + numSteps);
+                break;
+            case DOWN:
+                // Default positive-Y direction is DOWN
+                setY(y + numSteps);
+                break;
+            case LEFT:
+                setX(x - numSteps);
+                break;
+        }
+    }
+
     @Override
     public String toString() {
         return (getX() + ", " + getY());
