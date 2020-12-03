@@ -75,7 +75,7 @@ function instantiateTemplate() {
     targetFile="$2"
     targetDir=$( dirname "$2" )
 
-    pretty_print "Instantiating $(basename "$sourceFile") as $(basename "$outputFile1")" $fg_cyan$ta_bold
+    pretty_print "Instantiating $(basename "$sourceFile") as $(basename "$targetFile")" $fg_cyan$ta_bold
 
     # Make sure the targetDir exists
     mkdir -p $targetDir
