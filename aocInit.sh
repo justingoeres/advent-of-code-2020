@@ -85,6 +85,13 @@ function instantiateTemplate() {
     sed "s/\${AOC_DAY}/$day/g" $sourceFile > $targetFile
 }
 
+function get_problem_input() {
+    pretty_print "Downloading puzzle input for Day $raw_day" $fg_magenta$ta_bold
+
+    mkdir -p $( dirname "$puzzleInputFile" )
+    resources/aocdl -year $YEAR -day $day -output "$puzzleInputFile"
+}
+
 # DESC: Main control flow
 # ARGS: $@ (optional): Arguments provided to the script
 # OUTS: None
@@ -102,10 +109,13 @@ function main() {
     #lock_init system
 
     YEAR=2020
+    puzzleInputFile="data/day$day/input.txt"
     srcDir=src/main/java/org/jgoeres/adventofcode$YEAR/Day$day
     testDir=src/test/java/org/jgoeres/adventofcode$YEAR
-
     templateDir=resources/templates 
+
+    # Get the puzzle input
+    get_problem_input
     
     # RunDayXXTemplate.java
     templateFile1=RunDayXXTemplate.java
@@ -124,7 +134,7 @@ function main() {
 
     # Commit everything
     pretty_print "Committing..." $fg_yellow$ta_bold
-    git add "$srcDir/$outputFile1" "$srcDir/$outputFile2" "$testDir/$outputFile3"
+    git add "$puzzleInputFile" "$srcDir/$outputFile1" "$srcDir/$outputFile2" "$testDir/$outputFile3"
     git commit -m "Day $raw_day Init from aocInit.sh"
 
 }
