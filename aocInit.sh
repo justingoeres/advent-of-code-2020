@@ -26,7 +26,7 @@ function script_usage() {
 Usage:
      -d|--day                   Specifies the AoC day # to create
      -h|--help                  Displays this help
-       |--no-commit             Suppress git commit
+       |--no-commit             Suppress git branch/commit
     -np|--no-puzzle             Suppress puzzle input download
     -nt|--no-templates          Suppress template instantiation
      -v|--verbose               Displays verbose output
@@ -152,10 +152,18 @@ function main() {
     pretty_print "Instantiating templates...$ta_bold  [SKIPPED]" $fg_cyan
   fi
 
-  # Commit everything
+  # Open a new branch and commit everything
   if [[ -z ${no_commit-} ]]; then
     pretty_print "Committing..." $fg_yellow$ta_bold
-    git add "$puzzleInputFile" "$srcDir/$outputFile1" "$srcDir/$outputFile2" "$testDir/$outputFile3"
+
+    new_branch_name=day$day
+    git checkout -b $new_branch_name
+    if [[ -z ${no_puzzle-} ]]; then
+      git add "$puzzleInputFile"
+    fi
+    if [[ -z ${no_templates-} ]]; then
+      git add "$srcDir/$outputFile1" "$srcDir/$outputFile2" "$testDir/$outputFile3"
+    fi
     git commit -m "Day $raw_day Init from aocInit.sh"
   else
     pretty_print "Committing...$ta_bold  [SKIPPED]" $fg_yellow
