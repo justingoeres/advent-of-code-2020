@@ -17,12 +17,12 @@ public abstract class RunDay04 {
         return result;
     }
 
-    public static int problem04B() {
+    public static long problem04B() {
         System.out.println("=== DAY 04B ===");
 
-        int result = passportService.doPartB();
+        long result = passportService.doPartB();
 
-        System.out.println("Day 04B: Answer = " + result);
+        System.out.println("Day 04B: Number of valid passports = " + result);
 
 //        Day {$AOC_DAY}B: Answer =
 //        Time elapsed:	xxx ms

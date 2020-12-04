@@ -18,12 +18,12 @@ public class Day04Test {
 
    @Test
    public void Day04B() {
-       int result = 0;
+       long result = 0;
        try {
            result = RunDay04.problem04B();
        } catch (Exception e) {
            System.out.println(e.getMessage());
        }
-       Assert.assertEquals(0, result);
+       Assert.assertEquals(101, result);
    }
 }
