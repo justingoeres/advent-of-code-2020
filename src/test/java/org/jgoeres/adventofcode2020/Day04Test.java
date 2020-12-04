@@ -7,13 +7,13 @@ import org.junit.Test;
 public class Day04Test {
    @Test
    public void Day04A() {
-       int result = 0;
+       long result = 0;
        try {
            result = RunDay04.problem04A();
        } catch (Exception e) {
            System.out.println(e.getMessage());
        }
-       Assert.assertEquals(0, result);
+       Assert.assertEquals(192, result);
    }
 
    @Test
