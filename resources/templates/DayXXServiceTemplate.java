@@ -2,7 +2,8 @@ package org.jgoeres.adventofcode2020.Day${AOC_DAY};
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Day${AOC_DAY}Service {
     private final String DEFAULT_INPUTS_PATH = "data/day${AOC_DAY}/input.txt";
