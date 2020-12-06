@@ -60,7 +60,6 @@ public class Day05Service {
                         rowNum = rowNum << 1;
                         rowNum += ((rowChar == 'B') ? 1 : 0);
                     }
-//                    System.out.println("Row:\t" + rowNum);
 
                     // Calculate the column number
                     int columnNum = 0;
@@ -68,10 +67,8 @@ public class Day05Service {
                         columnNum = columnNum << 1;
                         columnNum += ((columnChar == 'R') ? 1 : 0);
                     }
-//                    System.out.println("Column:\t" + columnNum);
 
                     int result = rowNum * 8 + columnNum;
-                    System.out.println("Result:\t" + result);
 
                     if (result > maxResult) maxResult = result;
                 }
