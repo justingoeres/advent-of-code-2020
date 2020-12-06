@@ -5,25 +5,28 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class Day06Test {
-   @Test
-   public void Day06A() {
-       int result = 0;
-       try {
-           result = RunDay06.problem06A();
-       } catch (Exception e) {
-           System.out.println(e.getMessage());
-       }
-       Assert.assertEquals(0, result);
-   }
+    @Test
+    public void Day06A() {
+        int result = 0;
+        try {
+            result = RunDay06.problem06A();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        /** For each group, count the number of questions to which anyone answered "yes".
+         * What is the sum of those counts?
+         **/
+        Assert.assertEquals(6799, result);
+    }
 
-   @Test
-   public void Day06B() {
-       int result = 0;
-       try {
-           result = RunDay06.problem06B();
-       } catch (Exception e) {
-           System.out.println(e.getMessage());
-       }
-       Assert.assertEquals(0, result);
-   }
+    @Test
+    public void Day06B() {
+        int result = 0;
+        try {
+            result = RunDay06.problem06B();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(0, result);
+    }
 }
