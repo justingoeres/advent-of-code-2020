@@ -38,7 +38,12 @@ public class Day06Service {
 
     public int doPartB() {
         int result = 0;
-        /** Put problem implementation here **/
+        /** For each group, count the number of questions to which everyone answered "yes".
+         * What is the sum of those counts?
+         **/
+        for (Group group : groups) {
+            result += group.everyoneYesAnswers();
+        }
 
         return result;
     }

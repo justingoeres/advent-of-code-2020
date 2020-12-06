@@ -13,7 +13,7 @@ public class Day06Test {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        /** For each group, count the number of questions to which anyone answered "yes".
+        /** For each group, count the number of questions to which ANYONE answered "yes".
          * What is the sum of those counts?
          **/
         Assert.assertEquals(6799, result);
@@ -27,6 +27,9 @@ public class Day06Test {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        Assert.assertEquals(0, result);
+        /** For each group, count the number of questions to which EVERYONE answered "yes".
+         * What is the sum of those counts?
+         **/
+        Assert.assertEquals(3354, result);
     }
 }
