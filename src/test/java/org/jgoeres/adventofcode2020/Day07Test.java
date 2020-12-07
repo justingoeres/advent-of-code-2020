@@ -8,7 +8,7 @@ import org.junit.Test;
 public class Day07Test {
 
     @Test
-    public void Day07Example1() {
+    public void Day07AExample1() {
         BaggageService baggageService = new BaggageService("data/day07/example1.txt");
         int result = 0;
         try {
@@ -30,7 +30,32 @@ public class Day07Test {
        Assert.assertEquals(248, result);
    }
 
-   @Test
+    @Test
+    public void Day07BExample1() {
+        BaggageService baggageService = new BaggageService("data/day07/example1.txt");
+        int result = 0;
+        try {
+            result = baggageService.doPartB();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(32, result);
+    }
+
+    @Test
+    public void Day07BExample2() {
+        BaggageService baggageService = new BaggageService("data/day07/example2.txt");
+        int result = 0;
+        try {
+            result = baggageService.doPartB();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(126, result);
+    }
+
+
+    @Test
    public void Day07B() {
        int result = 0;
        try {
@@ -38,6 +63,6 @@ public class Day07Test {
        } catch (Exception e) {
            System.out.println(e.getMessage());
        }
-       Assert.assertEquals(0, result);
+       Assert.assertEquals(57281, result);
    }
 }

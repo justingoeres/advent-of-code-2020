@@ -30,14 +30,17 @@ public class BaggageService {
         HashSet<Bag> allContainingBags = new HashSet<>();
 
         Bag targetBag = allBags.get("shiny gold");
-        result = findAllContainingBags(targetBag,allContainingBags).size();
+        result = findAllContainingBags(targetBag, allContainingBags).size();
 
         return result;
     }
 
     public int doPartB() {
         int result = 0;
-        /** Put problem implementation here **/
+        /** How many individual bags are required inside your single shiny gold bag? **/
+
+        Bag sourceBag = allBags.get("shiny gold");
+        result = countAllContainedBags(sourceBag);  // subtract off "itself" from the shiny gold's count
 
         return result;
     }
@@ -50,10 +53,23 @@ public class BaggageService {
                 // Add it to our running list of bags
                 allContainingBags.add(containingBag);
                 // Process everything that contains it
-                findAllContainingBags(containingBag,allContainingBags);
+                findAllContainingBags(containingBag, allContainingBags);
             }
         }
         return allContainingBags;
+    }
+
+    private Integer countAllContainedBags(Bag sourceBag) {
+        int contentsCount = 0;
+        HashMap<Bag, Integer> containedBags = sourceBag.getContains();
+
+        // If this bag doesn't contain any others, this loop gets skipped and we return 0
+        for (Bag contained : containedBags.keySet()) {
+            // Add this contained bag (multiplied by its own count) to our running total
+            int containedNum = containedBags.get(contained);
+            contentsCount += containedNum + containedNum * countAllContainedBags(contained);
+        }
+        return contentsCount;
     }
 
     private Bag getOrCreateInAllBags(String bagName) {
@@ -94,16 +110,12 @@ public class BaggageService {
                     String field2 = m1.group(2);
 
                     Bag currentBag = getOrCreateInAllBags(bagName);
-
                     // Now parse the "contains" list
                     Matcher m2 = p2.matcher(field2);
-                    System.out.println(bagName);
                     while (m2.find()) {
                         // Add the "contains" bag
-                        System.out.println("\t" + m2.group(1) + "\t" + m2.group(2));
                         Integer count = Integer.parseInt(m2.group(1));
                         String containsBagName = m2.group(2);
-
                         currentBag.addToContains(count, getOrCreateInAllBags(containsBagName));
                     }
                 }

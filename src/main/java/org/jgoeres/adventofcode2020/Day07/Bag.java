@@ -23,8 +23,8 @@ public class Bag {
         containedBy.add(containingBag);
     }
 
-    public String getName() {
-        return name;
+    public HashMap<Bag, Integer> getContains() {
+        return contains;
     }
 
     public HashSet<Bag> getContainedBy() {
