@@ -2,7 +2,6 @@ package org.jgoeres.adventofcode2020.Day07;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Matcher;
@@ -13,7 +12,6 @@ public class BaggageService {
 
     private static boolean DEBUG = false;
 
-    private ArrayList<Integer> inputList = new ArrayList<>();
     private HashMap<String, Bag> allBags = new HashMap<>();
 
     public BaggageService() {
@@ -93,7 +91,7 @@ public class BaggageService {
      **/
 
     private void loadInputs(String pathToFile) {
-        inputList.clear();
+        allBags.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;
             Integer nextInt = 0;
