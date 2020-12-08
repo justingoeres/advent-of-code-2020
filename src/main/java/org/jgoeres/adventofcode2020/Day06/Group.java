@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 public class Group {
     private HashSet<Passenger> passengers = new HashSet<>();
+    private Set<Character> commonAnswers = new HashSet<>();
 
     public void addPassenger(Passenger passenger) {
         passengers.add(passenger);
@@ -24,8 +25,8 @@ public class Group {
     }
 
     public int everyoneYesAnswers() {
-        int total = 0;
-        Set<Character> commonAnswers = new HashSet<>();
+        int total;
+        commonAnswers.clear();
         boolean firstPassenger = true;
         for (Passenger p : passengers) {
             if (firstPassenger) {
