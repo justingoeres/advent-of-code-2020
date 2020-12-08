@@ -7,23 +7,25 @@ import org.junit.Test;
 public class Day${AOC_DAY}Test {
    @Test
    public void Day${AOC_DAY}A() {
+       final int EXPECTED = null;
        int result = 0;
        try {
            result = RunDay${AOC_DAY}.problem${AOC_DAY}A();
        } catch (Exception e) {
            System.out.println(e.getMessage());
        }
-       Assert.assertEquals(0, result);
+       Assert.assertEquals(EXPECTED, result);
    }
 
    @Test
    public void Day${AOC_DAY}B() {
+       final int EXPECTED = null;
        int result = 0;
        try {
            result = RunDay${AOC_DAY}.problem${AOC_DAY}B();
        } catch (Exception e) {
            System.out.println(e.getMessage());
        }
-       Assert.assertEquals(0, result);
+       Assert.assertEquals(EXPECTED, result);
    }
 }

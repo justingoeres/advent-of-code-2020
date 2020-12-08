@@ -11,9 +11,6 @@ public abstract class RunDay${AOC_DAY} {
 
         System.out.println("Day ${AOC_DAY}A: Answer = " + result);
 
-//        Day ${AOC_DAY}A: Answer =
-//        Time elapsed:	xxx ms
-
         return result;
     }
 
@@ -23,9 +20,6 @@ public abstract class RunDay${AOC_DAY} {
         int result = day${AOC_DAY}Service.doPartB();
 
         System.out.println("Day ${AOC_DAY}B: Answer = " + result);
-
-//        Day {$AOC_DAY}B: Answer =
-//        Time elapsed:	xxx ms
 
         return result;
     }
