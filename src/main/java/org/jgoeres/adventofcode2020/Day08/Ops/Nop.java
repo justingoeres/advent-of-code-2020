@@ -15,16 +15,6 @@ public class Nop extends Op {
          * The instruction immediately below it is executed next.
          */
         super.execute(cpu);
-//        if (cpu.isTestForFix()) {
-//            // Test to see if changing this instruction to a Nop would
-//            // cause a termination
-//            // Jmp would increment the pc by arg
-////            if (cpu.getPc() + getArg() == cpu.getTerminationPC()) {
-//                if (cpu.getPc() + getArg() >= 628) {
-//                System.out.println("FOUND A TERMINATION CHANGING NOP TO JMP; ACCUMULATOR IS " + cpu.getAccumulator());
-//            }
-//        }
-
         cpu.incrementPC();
     }
 }
