@@ -4,9 +4,6 @@ public class Op {
     int arg;
     boolean executed = false;
 
-    public Op() {
-    }
-
     public Op(int arg) {
         this.arg = arg;
     }

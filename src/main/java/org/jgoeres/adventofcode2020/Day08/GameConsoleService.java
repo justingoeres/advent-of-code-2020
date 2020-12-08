@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Day08Service {
+public class GameConsoleService {
     private final String DEFAULT_INPUTS_PATH = "data/day08/input.txt";
 
     private static boolean DEBUG = false;
@@ -18,11 +18,11 @@ public class Day08Service {
     private ArrayList<Op> inputList = new ArrayList<>();
     private CPU cpu;
 
-    public Day08Service() {
+    public GameConsoleService() {
         loadInputs(DEFAULT_INPUTS_PATH);
     }
 
-    public Day08Service(String pathToFile) {
+    public GameConsoleService(String pathToFile) {
         loadInputs(pathToFile);
     }
 
@@ -86,12 +86,12 @@ public class Day08Service {
             if (cpu.getPc() == cpu.getTerminationPC()) {
                 // We found it!
                 result = cpu.getAccumulator();
-                System.out.println("Program terminates when opcode at address '" + i + "' is swapped! ("
+                System.out.println("Program terminates when op at address '" + i + "' is swapped! ("
                         + originalOp + " -> " + newOp + ")");
                 System.out.println("Final accumulator value:\t" + result);
                 break;
             }
-            // Reset the program back to what it was before the change
+            // Switch the opcode back to what it was before the change
             cpu.setOp(originalOp, i);
         }
         return result;
@@ -110,7 +110,6 @@ public class Day08Service {
              */
             String line;
             Integer nextInt = 0;
-            /** Replace this regex **/
             Pattern p = Pattern.compile("(\\w{3}) ([+-]\\d+)");
             while ((line = br.readLine()) != null) {
                 // process the line.

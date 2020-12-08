@@ -10,7 +10,6 @@ public class CPU {
     private int accumulator;
 
     private int terminationPC;
-    private boolean testForFix = false;
 
     private ArrayList<Op> program;
 
@@ -66,14 +65,6 @@ public class CPU {
         return accumulator;
     }
 
-    public void setTestForFix(boolean testForFix) {
-        this.testForFix = testForFix;
-    }
-
-    public boolean isTestForFix() {
-        return testForFix;
-    }
-
     public int getPc() {
         return pc;
     }
@@ -94,7 +85,4 @@ public class CPU {
         program.set(address, op);
     }
 
-    public void setProgram(ArrayList<Op> program) {
-        this.program = program;
-    }
 }
