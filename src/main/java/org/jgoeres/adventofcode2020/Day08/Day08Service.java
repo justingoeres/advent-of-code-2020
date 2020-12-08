@@ -60,13 +60,14 @@ public class Day08Service {
         // Run the program a whole bunch of times, changing JMPs to NOPs and vice versa
         for (int i = 0; i < cpu.getProgramLength(); i++) {
             Op originalOp = cpu.getOp(i);
+            Op newOp = null;
             if (originalOp instanceof Jmp) {
                 // If it's a jump, make it a Nop
-                Op newOp = new Nop(originalOp.getArg());
+                newOp = new Nop(originalOp.getArg());
                 cpu.setOp(newOp, i);
             } else if (originalOp instanceof Nop) {
                 // If it's a Nop, make it an Jmp
-                Op newOp = new Jmp(originalOp.getArg());
+                newOp = new Jmp(originalOp.getArg());
                 cpu.setOp(newOp, i);
             } else if (originalOp instanceof Acc) {
                 // If it's an accumulator, don't change anything and skip this trial
@@ -79,11 +80,14 @@ public class Day08Service {
                 done = cpu.executeNext();
             }
             // When the program ends, check the pc.
-            System.out.println(i + "\t" + cpu.getPc() + "\t" + cpu.getAccumulator());
+            if (DEBUG) {
+                System.out.println(i + "\t" + cpu.getPc() + "\t" + cpu.getAccumulator());
+            }
             if (cpu.getPc() == cpu.getTerminationPC()) {
                 // We found it!
                 result = cpu.getAccumulator();
-                System.out.println("Program terminates when opcode at address '" + i + "' is swapped!");
+                System.out.println("Program terminates when opcode at address '" + i + "' is swapped! ("
+                        + originalOp + " -> " + newOp + ")");
                 System.out.println("Final accumulator value:\t" + result);
                 break;
             }

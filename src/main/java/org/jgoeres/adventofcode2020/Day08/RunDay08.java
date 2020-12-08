@@ -9,7 +9,7 @@ public abstract class RunDay08 {
 
         int result = day08Service.doPartA();
 
-        System.out.println("Day 08A: Answer = " + result);
+        System.out.println("Day 08A: Accumulator when program loops = " + result);
 
 //        Day 08A: Answer =
 //        Time elapsed:	xxx ms
@@ -22,7 +22,7 @@ public abstract class RunDay08 {
 
         int result = day08Service.doPartB();
 
-        System.out.println("Day 08B: Answer = " + result);
+        System.out.println("Day 08B: Accumulator when fixed program terminates = " + result);
 
 //        Day {$AOC_DAY}B: Answer =
 //        Time elapsed:	xxx ms

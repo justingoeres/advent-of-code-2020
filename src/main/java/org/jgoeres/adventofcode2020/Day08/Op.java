@@ -27,4 +27,9 @@ public class Op {
         // set executed back to false
         executed = false;
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName().toLowerCase() + " " + arg ;
+    }
 }
