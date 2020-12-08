@@ -22,4 +22,9 @@ public class Op {
     public boolean isExecuted() {
         return executed;
     }
+
+    public void reset() {
+        // set executed back to false
+        executed = false;
+    }
 }

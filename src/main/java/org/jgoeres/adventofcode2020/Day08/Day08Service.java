@@ -17,6 +17,7 @@ public class Day08Service {
 
     private ArrayList<Op> inputList = new ArrayList<>();
     private CPU cpu;
+
     public Day08Service() {
         loadInputs(DEFAULT_INPUTS_PATH);
     }
@@ -32,6 +33,7 @@ public class Day08Service {
          * Immediately before any instruction is executed a second time,
          * what value is in the accumulator?
          **/
+        cpu.reset(); // just in case
 
         boolean done = false;
         // Run the program
@@ -45,8 +47,49 @@ public class Day08Service {
 
     public int doPartB() {
         int result = 0;
-        /** Put problem implementation here **/
+        /** Fix the program so that it terminates normally by changing
+         * exactly one jmp (to nop) or nop (to jmp).
+         *
+         * What is the value of the accumulator after the program terminates? **/
+        // Reset the CPU after Part A
+//        cpu.setTestForFix(true);
 
+        boolean done = false;
+        ArrayList<Op> originalProgram = (ArrayList<Op>) inputList.clone();
+
+        // Run the program a whole bunch of times, changing JMPs to NOPs and vice versa
+        for (int i = 0; i < cpu.getProgramLength(); i++) {
+            Op originalOp = cpu.getOp(i);
+            if (originalOp instanceof Jmp) {
+                // If it's a jump, make it a Nop
+                Op newOp = new Nop(originalOp.getArg());
+                cpu.setOp(newOp, i);
+            } else if (originalOp instanceof Nop) {
+                // If it's a Nop, make it an Jmp
+                Op newOp = new Jmp(originalOp.getArg());
+                cpu.setOp(newOp, i);
+            } else if (originalOp instanceof Acc) {
+                // If it's an accumulator, don't change anything and skip this trial
+                continue;
+            }
+            // If we get here, we've changed an instruction. Run it and see what happens!
+            cpu.reset();
+            done = false;
+            while (!done) {
+                done = cpu.executeNext();
+            }
+            // When the program ends, check the pc.
+            System.out.println(i + "\t" + cpu.getPc() + "\t" + cpu.getAccumulator());
+            if (cpu.getPc() == cpu.getTerminationPC()) {
+                // We found it!
+                result = cpu.getAccumulator();
+                System.out.println("Program terminates when opcode at address '" + i + "' is swapped!");
+                System.out.println("Final accumulator value:\t" + result);
+                break;
+            }
+            // Reset the program back to what it was before the change
+            cpu.setOp(originalOp, i);
+        }
         return result;
     }
 

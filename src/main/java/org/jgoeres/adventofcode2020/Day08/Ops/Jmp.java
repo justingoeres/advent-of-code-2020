@@ -20,6 +20,16 @@ public class Jmp extends Op {
          * above to be executed next.
          */
         super.execute(cpu);
+
+//        if (cpu.isTestForFix()) {
+//            // Test to see if changing this instruction to a Nop would
+//            // cause a termination
+//            // Nop would increment the pc by one
+////            if (cpu.getPc() + 1 = cpu.getTerminationPC()) {
+//            if (cpu.getPc() + 1 >= 628) {
+//                System.out.println("FOUND A TERMINATION CHANGING JMP TO NOP; ACCUMULATOR IS " + cpu.getAccumulator());
+//            }
+//        }
         // jump to an instruction relative to the current pc
         cpu.incrementPC(getArg());
         // do not increment the pc after jumping
