@@ -12,6 +12,10 @@ public class Password {
     int secondPosition; // for Part B
     String password;
 
+    // Create a Pattern object (static so it only gets created once)
+    static String pattern = "(\\d+)-(\\d+) ([a-z]): (\\w+)";
+    static Pattern r = Pattern.compile(pattern);
+
     public Password(int minOccurrences, int maxOccurrences, char requiredLetter, String password) {
         this.minOccurrences = minOccurrences;
         this.maxOccurrences = maxOccurrences;
@@ -46,10 +50,6 @@ public class Password {
         // 1-3 b: cdefg is invalid: neither position 1 nor position 3 contains b.
         // 2-9 c: ccccccccc is invalid: both position 2 and position 9 contain c.
 
-        String pattern = "(\\d+)-(\\d+) ([a-z]): (\\w+)";
-
-        // Create a Pattern object
-        Pattern r = Pattern.compile(pattern);
 
         // Now create matcher object.
         Matcher m = r.matcher(encodedPassword);
