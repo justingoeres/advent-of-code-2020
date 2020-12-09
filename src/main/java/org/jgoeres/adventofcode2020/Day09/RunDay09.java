@@ -22,17 +22,17 @@ public abstract class RunDay09 {
 
         long result = day09Service.doPartA(preambleLength);
 
-        System.out.println("Day 09A: First value that does NOT meet encoding requirements = " + result);
+        System.out.println("Day 09A: Invalid value = " + result);
 
         return result;
     }
 
-    public static int problem09B() {
+    public static long problem09B(long target) {
         System.out.println("=== DAY 09B ===");
 
-        int result = day09Service.doPartB();
+        long result = day09Service.doPartB(target);
 
-        System.out.println("Day 09B: Answer = " + result);
+        System.out.println("Day 09B: Encryption weakness sum = " + result);
 
         return result;
     }

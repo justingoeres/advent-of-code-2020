@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Day09Service {
     private final String DEFAULT_INPUTS_PATH = "data/day09/input.txt";
@@ -74,17 +75,61 @@ public class Day09Service {
             // If we get here, we're done iterating. If we found a valid combination, go to the next iteration.
             if (!valid) {
                 // we did NOT find a valid combo, so we're done searching!
+                System.out.println("Invalid value found at index " + index);
                 result = inputList.get(index);
                 return result;
             }
         }
     }
 
-    public int doPartB() {
-        int result = 0;
-        /** Put problem implementation here **/
+    public long doPartB(long target) {
+        long result = 0;
+        /** The final step in breaking the XMAS encryption relies on the invalid number you just found:
+         * you must find a contiguous set of at least two numbers in your list which sum to the
+         * invalid number from step 1.
+         *
+         * To find the encryption weakness, add together the smallest and largest number
+         * in this contiguous range; in this example, these are 15 and 47, producing 62.
+         *
+         * What is the encryption weakness in your XMAS-encrypted list of numbers?
+         **/
 
-        return result;
+        int targetIndex = inputList.indexOf(target);
+
+        // In general, the larger numbers are going to be CLOSER to the target index (i.e. near the top)
+        // Also, if at any point the contiguous sum is GREATER THAN the target, that segment is invalid
+        // and we can move on
+
+        int topIndex = targetIndex - 1; // Start just below the target
+        int bottomIndex = topIndex; // Start at the top, we decrement right away
+
+        // Go until we get an answer and break
+        while (true) {
+            long sum = inputList.get(topIndex);  // start with the value at the top
+            while (sum < target) {
+                bottomIndex--;
+                // Keep going as long as our sum is less than the target
+                sum += inputList.get(bottomIndex);  // add the item at the bottom
+            }
+            // When we get here, our sum is either:
+            //      == target : (yay!) or
+            //      > target :  (decrement topIndex and start over)
+            if (sum == target) {
+                // We found it! Now find the smallest & largest numbers in the range
+                List<Long> resultList = inputList.subList(bottomIndex, topIndex + 1);
+
+                long min = Collections.min(resultList);
+                long max = Collections.max(resultList);
+                System.out.println("Encryption weakness found at index " + inputList.indexOf(min) + " (" + min + ")"
+                        + " & " + inputList.indexOf(max) + " (" + max + ")");
+                result = min + max;
+                return result;
+            } else {
+                // We didn't find it yet. Decrement topIndex, reset, and start over
+                topIndex--;
+                bottomIndex = topIndex;
+            }
+        }
     }
 
     // load inputs line-by-line as Integers
