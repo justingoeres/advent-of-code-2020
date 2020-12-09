@@ -6,18 +6,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Day09Service {
-    private final String DEFAULT_INPUTS_PATH = "data/day09/input.txt";
+public class EncodingErrorService {
+    private static final String DEFAULT_INPUTS_PATH = "data/day09/input.txt";
 
-    private static boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
-    private ArrayList<Long> inputList = new ArrayList<>();
+    private final ArrayList<Long> inputList = new ArrayList<>();
 
-    public Day09Service() {
+    public EncodingErrorService() {
         loadInputs(DEFAULT_INPUTS_PATH);
     }
 
-    public Day09Service(String pathToFile) {
+    public EncodingErrorService(String pathToFile) {
         loadInputs(pathToFile);
     }
 
@@ -83,7 +83,7 @@ public class Day09Service {
     }
 
     public long doPartB(long target) {
-        long result = 0;
+        long result;
         /** The final step in breaking the XMAS encryption relies on the invalid number you just found:
          * you must find a contiguous set of at least two numbers in your list which sum to the
          * invalid number from step 1.
