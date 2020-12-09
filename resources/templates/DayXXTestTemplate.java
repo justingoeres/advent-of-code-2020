@@ -7,7 +7,7 @@ import org.junit.Test;
 public class Day${AOC_DAY}Test {
    @Test
    public void Day${AOC_DAY}A() {
-       final int EXPECTED = null;
+       final int EXPECTED = 0;
        int result = 0;
        try {
            result = RunDay${AOC_DAY}.problem${AOC_DAY}A();
@@ -19,7 +19,7 @@ public class Day${AOC_DAY}Test {
 
    @Test
    public void Day${AOC_DAY}B() {
-       final int EXPECTED = null;
+       final int EXPECTED = 0;
        int result = 0;
        try {
            result = RunDay${AOC_DAY}.problem${AOC_DAY}B();
