@@ -9,7 +9,7 @@ public abstract class RunDay10 {
 
         int result = day10Service.doPartA();
 
-        System.out.println("Day 10A: Answer = " + result);
+        System.out.println("Day 10A: Product of 'ones' & 'threes' joltage differences = " + result);
 
         return result;
     }
