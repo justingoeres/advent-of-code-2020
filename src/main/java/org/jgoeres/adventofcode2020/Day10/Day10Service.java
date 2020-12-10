@@ -2,11 +2,9 @@ package org.jgoeres.adventofcode2020.Day10;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Day10Service {
     private final String DEFAULT_INPUTS_PATH = "data/day10/input.txt";
@@ -61,10 +59,51 @@ public class Day10Service {
         return result;
     }
 
-    public int doPartB() {
-        int result = 0;
-        /** Put problem implementation here **/
+    public Long doPartB() {
+        Long result = 0L;
+        /** What is the total number of distinct ways you can arrange
+         * the adapters to connect the charging outlet to your device?
+         **/
 
+        // Build a tree of all the adapters and what they can connect to
+        // The root adapter is the port itself
+        HashMap<Integer, AdapterNode> allAdapters = new HashMap<>();
+
+        // Create a map of AdapterNodes from all known Adapters
+        for (Integer joltage : adapterSet) {
+            AdapterNode portNode = new AdapterNode(joltage);
+            allAdapters.put(joltage, portNode);
+        }
+
+        int portJoltage = 0;
+        int deviceJoltage = Collections.max(adapterSet) + 3;
+
+        AdapterNode portNode = new AdapterNode(portJoltage);
+        allAdapters.put(portJoltage, portNode);
+        AdapterNode deviceNode = new AdapterNode(deviceJoltage);
+        allAdapters.put(deviceJoltage, deviceNode);
+
+
+        // Attach them to each other
+        for (Integer joltage : allAdapters.keySet()) {
+            // For each adapter joltage
+            AdapterNode adapter = allAdapters.get(joltage);
+            for (int j = joltage + 1; j <= joltage + 3; j++) {
+                // Check the joltages 1-3 jolts above this adapter, and connect them
+                if (allAdapters.containsKey(j)) {
+                    // We have an adapter for this joltage
+                    // Make it a child of us
+                    adapter.addChild(allAdapters.get(j));
+                    // Make us a parent of it
+                    allAdapters.get(j).addParent(adapter);
+                }
+            }
+        }
+
+        // There is one "path" from the device to itself
+        deviceNode.setTotalNumPaths(1L);
+        // Now calculate all paths from the port to the device
+        result = portNode.calculateTotalNumPaths();
         return result;
     }
 
