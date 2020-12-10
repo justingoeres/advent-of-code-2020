@@ -1,12 +1,11 @@
 package org.jgoeres.adventofcode2020;
 
-import org.jgoeres.adventofcode2020.Day10.Day10Service;
+import org.jgoeres.adventofcode2020.Day10.AdapterService;
 import org.jgoeres.adventofcode2020.Day10.RunDay10;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class Day10Test {
-
    @Test
    public void Day10A() {
        final int EXPECTED = 1625;
@@ -19,14 +18,13 @@ public class Day10Test {
        Assert.assertEquals(EXPECTED, result);
    }
 
-
     @Test
     public void Day10BExample1() {
         final long EXPECTED = 8;
-        Day10Service day10Service = new Day10Service("data/day10/example1.txt");
+        AdapterService adapterService = new AdapterService("data/day10/example1.txt");
         long result = 0;
         try {
-            result = day10Service.doPartB();;
+            result = adapterService.doPartB();;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -36,15 +34,16 @@ public class Day10Test {
     @Test
     public void Day10BExample2() {
         final long EXPECTED = 19208;
-        Day10Service day10Service = new Day10Service("data/day10/example2.txt");
+        AdapterService adapterService = new AdapterService("data/day10/example2.txt");
         long result = 0;
         try {
-            result = day10Service.doPartB();;
+            result = adapterService.doPartB();;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         Assert.assertEquals(EXPECTED, result);
     }
+
     @Test
    public void Day10B() {
        final Long EXPECTED = 3100448333024L;

@@ -6,18 +6,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class Day10Service {
+public class AdapterService {
     private final String DEFAULT_INPUTS_PATH = "data/day10/input.txt";
 
     private static boolean DEBUG = true;
 
     private HashSet<Integer> adapterSet = new HashSet<>();
 
-    public Day10Service() {
+    public AdapterService() {
         loadInputs(DEFAULT_INPUTS_PATH);
     }
 
-    public Day10Service(String pathToFile) {
+    public AdapterService(String pathToFile) {
         loadInputs(pathToFile);
     }
 
