@@ -43,6 +43,29 @@ public enum Direction8Way {
         return directionString;
     }
 
+    public Direction8Way opposite() {
+        switch (get(directionString)) {
+            case UP:
+                return DOWN;
+            case UP_RIGHT:
+                return DOWN_LEFT;
+            case RIGHT:
+                return LEFT;
+            case DOWN_RIGHT:
+                return UP_LEFT;
+            case DOWN:
+                return UP;
+            case DOWN_LEFT:
+                return UP_RIGHT;
+            case LEFT:
+                return RIGHT;
+            case UP_LEFT:
+                return DOWN_RIGHT;
+        }
+        // We can never actually get here
+        return null;
+    }
+
     public Direction8Way rotate(Rotation rotation) {
         int newDirection = this.ordinal();
         Direction8Way newDirectionURDLEnum = null;
