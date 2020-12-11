@@ -2,6 +2,8 @@ package org.jgoeres.adventofcode2020.common;
 
 import java.util.Objects;
 
+import static org.jgoeres.adventofcode2020.common.Direction8Way.*;
+
 public class XYPoint {
     private int x = 0;
     private int y = 0;
@@ -36,11 +38,11 @@ public class XYPoint {
         this.y = y;
     }
 
-    public XYPoint getRelativeLocation(DirectionURDL directionURDL) {
+    public XYPoint getRelativeLocation(Direction8Way directionURDL) {
         return getRelativeLocation(1, directionURDL);
     }
 
-    public XYPoint getRelativeLocation(int numSteps, DirectionURDL directionURDL) {
+    public XYPoint getRelativeLocation(int numSteps, Direction8Way directionURDL) {
         switch (directionURDL) {
             case UP:
                 // Default negative-Y direction is UP
@@ -52,6 +54,33 @@ public class XYPoint {
                 return (new XYPoint(getX(), getY() + numSteps));
             case LEFT:
                 return (new XYPoint(getX() - numSteps, getY()));
+        }
+        return null;
+    }
+
+    public XYPoint getRelativeLocation8Way(Direction8Way direction8Way) {
+        return getRelativeLocation8Way(1, direction8Way);
+    }
+
+    public XYPoint getRelativeLocation8Way(int numSteps, Direction8Way direction8Way) {
+        switch (direction8Way) {
+            case UP:
+                return (getRelativeLocation(numSteps, UP));
+            case UP_RIGHT:
+                return (getRelativeLocation(numSteps, UP).getRelativeLocation(numSteps, Direction8Way.RIGHT));
+            case RIGHT:
+                return (getRelativeLocation(numSteps, RIGHT));
+            case DOWN_RIGHT:
+                return (getRelativeLocation(numSteps, DOWN).getRelativeLocation(numSteps, Direction8Way.RIGHT));
+            case DOWN:
+                return (getRelativeLocation(numSteps, DOWN));
+            case DOWN_LEFT:
+                // Default negative-Y direction is UP
+                return (getRelativeLocation(numSteps, DOWN).getRelativeLocation(numSteps, Direction8Way.LEFT));
+            case LEFT:
+                return (getRelativeLocation(numSteps, LEFT));
+            case UP_LEFT:
+                return (getRelativeLocation(numSteps, UP).getRelativeLocation(numSteps, Direction8Way.LEFT));
         }
         return null;
     }
