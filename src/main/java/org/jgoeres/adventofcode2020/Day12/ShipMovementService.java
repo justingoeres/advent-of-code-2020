@@ -6,18 +6,18 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Day12Service {
+public class ShipMovementService {
     private final String DEFAULT_INPUTS_PATH = "data/day12/input.txt";
 
     private static boolean DEBUG = false;
 
     private ArrayList<Move> moveList = new ArrayList<>();
 
-    public Day12Service() {
+    public ShipMovementService() {
         loadInputs(DEFAULT_INPUTS_PATH);
     }
 
-    public Day12Service(String pathToFile) {
+    public ShipMovementService(String pathToFile) {
         loadInputs(pathToFile);
     }
 

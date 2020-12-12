@@ -1,6 +1,6 @@
 package org.jgoeres.adventofcode2020;
 
-import org.jgoeres.adventofcode2020.Day12.Day12Service;
+import org.jgoeres.adventofcode2020.Day12.ShipMovementService;
 import org.jgoeres.adventofcode2020.Day12.RunDay12;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,10 +21,10 @@ public class Day12Test {
     @Test
     public void Day12BExample1() {
         final long EXPECTED = 286;
-        Day12Service day12service = new Day12Service("data/day12/example1.txt");
+        ShipMovementService shipMovementService = new ShipMovementService("data/day12/example1.txt");
         long result = 0;
         try {
-            result = day12service.doPartB();;
+            result = shipMovementService.doPartB();;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
