@@ -1,4 +1,5 @@
 package org.jgoeres.adventofcode2020.Day12;
+
 public abstract class RunDay12 {
     static String pathToInputs = "data/day12/input.txt";
 
@@ -9,7 +10,7 @@ public abstract class RunDay12 {
 
         int result = day12Service.doPartA();
 
-        System.out.println("Day 12A: Answer = " + result);
+        System.out.println("Day 12A: Ship final location (Manhattan distance) = " + result);
 
         return result;
     }
@@ -19,11 +20,8 @@ public abstract class RunDay12 {
 
         int result = day12Service.doPartB();
 
-        System.out.println("Day 12B: Answer = " + result);
+        System.out.println("Day 12B: Ship final location (Manhattan distance) = " + result);
 
         return result;
     }
-
-
-
 }

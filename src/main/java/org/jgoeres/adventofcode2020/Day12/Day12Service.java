@@ -41,8 +41,20 @@ public class Day12Service {
 
     public int doPartB() {
         int result = 0;
-        /** Put problem implementation here **/
+        /** Figure out where the navigation instructions actually lead.
+         * What is the Manhattan distance between that location
+         * and the ship's starting position?
+         **/
+        // Get a new ship
+        Ship ship = new Ship();
+        for (Move move : moveList) {
+            ship.followWaypoint(move);
+        }
 
+        // Find the Manhattan location of the ship
+        int absX = Math.abs(ship.location.getX());
+        int absY = Math.abs(ship.location.getY());
+        result = absX + absY;
         return result;
     }
 
