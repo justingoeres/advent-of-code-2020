@@ -7,7 +7,7 @@ import org.junit.Test;
 public class Day12Test {
    @Test
    public void Day12A() {
-       final int EXPECTED = 0;
+       final int EXPECTED = 1177;
        int result = 0;
        try {
            result = RunDay12.problem12A();
