@@ -1,6 +1,5 @@
 package org.jgoeres.adventofcode2020.Day12;
 
-import org.jgoeres.adventofcode2020.common.DirectionURDL;
 import org.jgoeres.adventofcode2020.common.XYPoint;
 
 import java.util.ArrayList;
@@ -37,11 +36,11 @@ public class Ship {
             case EAST:
             case SOUTH:
             case WEST:
-                move(direction, distance);
+                moveShip(direction, distance);
                 break;
             case FORWARD:
                 // Move in the direction we're facing
-                move(facing, distance);
+                moveShip(facing, distance);
                 break;
             case LEFT:
             case RIGHT:
@@ -55,39 +54,24 @@ public class Ship {
         // e.g. if waypoint is (10, -1) then *each step* is 10 EAST, -1 NORTH
         // As long as we're allowed to use negative numbers, all moves-to-waypoint
         // can be represented as EAST & SOUTH
-        move(Direction.EAST, waypoint.getX() * numOfSteps);
-        move(Direction.SOUTH, waypoint.getY() * numOfSteps);
+        moveShip(Direction.EAST, waypoint.getX() * numOfSteps);
+        moveShip(Direction.SOUTH, waypoint.getY() * numOfSteps);
     }
 
-    public void move(Direction direction, Integer distance) {
-        switch (direction) {
-            case NORTH:
-                // Default negative-Y direction is UP/NORTH
-                location.setY(location.getY() - distance);
-                break;
-            case EAST:
-                location.setX(location.getX() + distance);
-                break;
-            case SOUTH:
-                // Default positive-Y direction is DOWN/SOUTH
-                location.setY(location.getY() + distance);
-                break;
-            case WEST:
-                location.setX(location.getX() - distance);
-                break;
-        }
+    public void moveShip(Direction direction, Integer distance) {
+        move(direction, distance, location);
     }
 
     public void rotate(Direction direction, Integer angle) {
         // Are we turning positive (RIGHT) or negative (LEFT)
-        Integer sign = ((direction == Direction.RIGHT) ? 1 : -1);
+        int sign = ((direction == Direction.RIGHT) ? 1 : -1);
         // How far?
-        Integer turnSteps = angle / 90;
+        int turnSteps = angle / 90;
         // Combine direction with # of steps
         turnSteps *= sign;
 
         // Turn the ship
-        Integer newDirectionInt = facings.indexOf(facing) + turnSteps;
+        int newDirectionInt = facings.indexOf(facing) + turnSteps;
         // Wrap it
         if (newDirectionInt >= facings.size()) newDirectionInt %= facings.size();
         else if (newDirectionInt < 0) newDirectionInt += facings.size();
@@ -119,27 +103,33 @@ public class Ship {
     }
 
     public void moveWaypoint(Direction direction, Integer distance) {
+        move(direction, distance, waypoint);
+    }
+
+    private void move(Direction direction, Integer distance, XYPoint xyPoint) {
         switch (direction) {
             case NORTH:
                 // Default negative-Y direction is UP/NORTH
-                waypoint.setY(waypoint.getY() - distance);
+                xyPoint.setY(xyPoint.getY() - distance);
                 break;
             case EAST:
-                waypoint.setX(waypoint.getX() + distance);
+                xyPoint.setX(xyPoint.getX() + distance);
                 break;
             case SOUTH:
                 // Default positive-Y direction is DOWN/SOUTH
-                waypoint.setY(waypoint.getY() + distance);
+                xyPoint.setY(xyPoint.getY() + distance);
                 break;
             case WEST:
-                waypoint.setX(waypoint.getX() - distance);
+                xyPoint.setX(xyPoint.getX() - distance);
                 break;
+            default:
+                // do nothing
         }
     }
 
     public void rotateWaypoint(Direction direction, Integer angle) {
         // How far?
-        Integer turnSteps = angle / 90;
+        int turnSteps = angle / 90;
 
         // Turn the waypoint
         for (int i = 0; i < turnSteps; i++) {
@@ -157,6 +147,8 @@ public class Ship {
                     waypoint.setY(waypoint.getX());
                     waypoint.setX(temp);
                     break;
+                default:
+                    // do nothing
             }
         }
     }

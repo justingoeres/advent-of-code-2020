@@ -27,6 +27,8 @@ public class Move {
             case "F":
                 this.direction = Ship.Direction.FORWARD;
                 break;
+            default:
+                // do nothing
         }
         this.distance = distance;
     }

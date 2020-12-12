@@ -7,11 +7,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ShipMovementService {
-    private final String DEFAULT_INPUTS_PATH = "data/day12/input.txt";
+    private static final String DEFAULT_INPUTS_PATH = "data/day12/input.txt";
 
-    private static boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
-    private ArrayList<Move> moveList = new ArrayList<>();
+    private final ArrayList<Move> moveList = new ArrayList<>();
 
     public ShipMovementService() {
         loadInputs(DEFAULT_INPUTS_PATH);
@@ -22,7 +22,7 @@ public class ShipMovementService {
     }
 
     public int doPartA() {
-        int result = 0;
+        int result;
         /** Figure out where the navigation instructions lead.
          *
          * What is the Manhattan distance between that location and the ship's starting position?
@@ -40,7 +40,7 @@ public class ShipMovementService {
     }
 
     public int doPartB() {
-        int result = 0;
+        int result;
         /** Figure out where the navigation instructions actually lead.
          * What is the Manhattan distance between that location
          * and the ship's starting position?
@@ -63,7 +63,6 @@ public class ShipMovementService {
         moveList.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;
-            Integer nextInt = 0;
             /** The navigation instructions (your puzzle input) consists of a sequence of single-character actions paired with integer input values. After staring at them for a few minutes, you work out what they probably mean:
              *       Action N means to move north by the given value.
              *       Action S means to move south by the given value.
