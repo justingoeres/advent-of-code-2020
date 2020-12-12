@@ -36,12 +36,12 @@ public class Seat {
         return neighbors.get(direction8Way);
     }
 
-    public int countOccupiedNeighbors() {
+    public int countOccupiedNeighbors(int threshold) {
         int count = 0;
         for (Seat neighborSeat : neighbors.values()) {
             if (neighborSeat.isOccupied())
                 count++;
-            if (count >= 4) {
+            if (count >= threshold) {
                 // If a seat is occupied (#) and four or more seats adjacent
                 // to it are also occupied, the seat becomes empty.
                 // (so we can stop counting when we find 4 occupied neighbors)
@@ -49,6 +49,10 @@ public class Seat {
             }
         }
         return count;
+    }
+
+    public boolean hasNeighbor(Direction8Way direction8Way) {
+        return neighbors.containsKey(direction8Way);
     }
 
     public boolean isOccupied() {

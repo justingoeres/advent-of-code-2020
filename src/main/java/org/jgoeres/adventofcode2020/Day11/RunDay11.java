@@ -19,7 +19,7 @@ public abstract class RunDay11 {
 
         int result = seatingSystemService.doPartB();
 
-        System.out.println("Day 11B: Answer = " + result);
+        System.out.println("Day 11B: Number of seats occupied = " + result);
 
         return result;
     }

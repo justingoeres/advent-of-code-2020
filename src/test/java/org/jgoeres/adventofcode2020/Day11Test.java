@@ -7,18 +7,18 @@ import org.junit.Test;
 
 public class Day11Test {
 
-    @Test
-    public void Day11AExample1() {
-        final long EXPECTED = 37;
-        SeatingSystemService seatingSystemService = new SeatingSystemService("data/day11/example1.txt");
-        long result = 0;
-        try {
-            result = seatingSystemService.doPartA();;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        Assert.assertEquals(EXPECTED, result);
-    }
+//    @Test
+//    public void Day11AExample1() {
+//        final long EXPECTED = 37;
+//        SeatingSystemService seatingSystemService = new SeatingSystemService("data/day11/example1.txt");
+//        long result = 0;
+//        try {
+//            result = seatingSystemService.doPartA();;
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//        Assert.assertEquals(EXPECTED, result);
+//    }
 
     @Test
    public void Day11A() {
@@ -32,9 +32,23 @@ public class Day11Test {
        Assert.assertEquals(EXPECTED, result);
    }
 
-   @Test
+//    @Test
+//    public void Day11BExample1() {
+//        final long EXPECTED = 26;
+//        SeatingSystemService seatingSystemService = new SeatingSystemService("data/day11/example1.txt");
+//        long result = 0;
+//        try {
+//            result = seatingSystemService.doPartB();;
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//        Assert.assertEquals(EXPECTED, result);
+//    }
+
+
+    @Test
    public void Day11B() {
-       final int EXPECTED = 0;
+       final int EXPECTED = 1897;
        int result = 0;
        try {
            result = RunDay11.problem11B();
