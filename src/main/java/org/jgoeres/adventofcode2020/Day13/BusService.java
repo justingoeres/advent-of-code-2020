@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-public class Day13Service {
+public class BusService {
     private final String DEFAULT_INPUTS_PATH = "data/day13/input.txt";
 
     private static final String OUT_OF_SERVICE = "x";
@@ -13,11 +13,11 @@ public class Day13Service {
     private ArrayList<Bus> buses = new ArrayList<>();
     long earliest;
 
-    public Day13Service() {
+    public BusService() {
         loadInputs(DEFAULT_INPUTS_PATH);
     }
 
-    public Day13Service(String pathToFile) {
+    public BusService(String pathToFile) {
         loadInputs(pathToFile);
     }
 
@@ -53,20 +53,19 @@ public class Day13Service {
         // for those TWO buses, and the INTERVAL that the condition occurs at.
         // Then use that starting timestamp, and that interval, to search for the condition for the NEXT bus.
         // Repeat until we're done
-
         long interval = buses.get(0).getInterval(); // initial step is the interval of the FIRST bus
         long t = interval;   // start at t= 0 + the first step (t=0 is degenerate)
         int j = 0;  // For debug output
         for (int i = 1; i < buses.size(); i++) {
             // Do each bus in order
             Bus nextBus = buses.get(i);
-            interval = Math.max(interval, nextBus.getInterval());
+            interval = Math.max(interval, nextBus.getInterval());   // Using the max of current interval or nextBus interval makes the search slightly faster
             while (true) {  // go until we find the solution
                 if (DEBUG) {
                     System.out.println("Iteration # " + j + ":\tt = " + t + " ; Step = " + interval + "\t(Bus # " + i + ")");
                     j++;
                 }
-                // We're looking for time t at which (t + gap) is an even multiple of nextBus's interval
+                // We're looking for time t at which (t + gap) is an even multiple of the current interval
                 if (((t + nextBus.getInterval() + nextBus.getGap())
                         % nextBus.getInterval()) == 0) {
                     // We found the time t where these buses are synced up (separated by 'gap')

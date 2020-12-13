@@ -1,6 +1,6 @@
 package org.jgoeres.adventofcode2020;
 
-import org.jgoeres.adventofcode2020.Day13.Day13Service;
+import org.jgoeres.adventofcode2020.Day13.BusService;
 import org.jgoeres.adventofcode2020.Day13.RunDay13;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,11 +20,11 @@ public class Day13Test {
 
     @Test
     public void Day13BExample1() {
-        Day13Service day13Service = new Day13Service("data/day13/example1.txt");
+        BusService busService = new BusService("data/day13/example1.txt");
         final int EXPECTED = 754018;
         long result = 0;
         try {
-            result = day13Service.doPartB();
+            result = busService.doPartB();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

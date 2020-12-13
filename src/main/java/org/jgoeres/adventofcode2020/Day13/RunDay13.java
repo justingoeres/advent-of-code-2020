@@ -2,14 +2,14 @@ package org.jgoeres.adventofcode2020.Day13;
 public abstract class RunDay13 {
     static String pathToInputs = "data/day13/input.txt";
 
-    static Day13Service day13Service = new Day13Service();
+    static BusService busService = new BusService();
 
     public static long problem13A() {
         System.out.println("=== DAY 13A ===");
 
-        long result = day13Service.doPartA();
+        long result = busService.doPartA();
 
-        System.out.println("Day 13A: Answer = " + result);
+        System.out.println("Day 13A: Earliest bus * earliest timestamp = " + result);
 
         return result;
     }
@@ -17,9 +17,9 @@ public abstract class RunDay13 {
     public static long problem13B() {
         System.out.println("=== DAY 13B ===");
 
-        long result = day13Service.doPartB();
+        long result = busService.doPartB();
 
-        System.out.println("Day 13B: Answer = " + result);
+        System.out.println("Day 13B: Earliest timestamp with buses in perfect order = " + result);
 
         return result;
     }
