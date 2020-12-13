@@ -10,7 +10,7 @@ public class Day13Service {
     private static final String OUT_OF_SERVICE = "x";
     private static boolean DEBUG = false;
 
-    private ArrayList<Long> busIntervals = new ArrayList<>();
+    private ArrayList<Bus> buses = new ArrayList<>();
     long earliest;
 
     public Day13Service() {
@@ -29,7 +29,8 @@ public class Day13Service {
          **/
         long bestBusId = 0;
         long minutesToWaitMin = Long.MAX_VALUE;
-        for (Long interval : busIntervals) {
+        for (Bus bus : buses) {
+            long interval = bus.getInterval();
             // How long do we have to wait for this bus?
             long previousArrival = earliest - (earliest % interval); // timestamp of the last bus BEFORE we can get on it.
             long minutesToWait = (previousArrival + interval) - earliest;    // time to wait for the NEXT bus, which we'll be able to get on
@@ -40,25 +41,51 @@ public class Day13Service {
             }
         }
         result = bestBusId * minutesToWaitMin;
-
-
-
         return result;
     }
 
-    public int doPartB() {
-        int result = 0;
-        /** Put problem implementation here **/
+    public long doPartB() {
+        /** What is the earliest timestamp such that all of the
+         * listed bus IDs depart at offsets matching their positions in the list?
+         **/
 
-        return result;
+        // Work through the list of buses pairwise. Find the timestamp that satisfies the conditions
+        // for those TWO buses, and the INTERVAL that the condition occurs at.
+        // Then use that starting timestamp, and that interval, to search for the condition for the NEXT bus.
+        // Repeat until we're done
+
+        long interval = buses.get(0).getInterval(); // initial step is the interval of the FIRST bus
+        long t = interval;   // start at t= 0 + the first step (t=0 is degenerate)
+        int j = 0;  // For debug output
+        for (int i = 1; i < buses.size(); i++) {
+            // Do each bus in order
+            Bus nextBus = buses.get(i);
+            interval = Math.max(interval, nextBus.getInterval());
+            while (true) {  // go until we find the solution
+                if (DEBUG) {
+                    System.out.println("Iteration # " + j + ":\tt = " + t + " ; Step = " + interval + "\t(Bus # " + i + ")");
+                    j++;
+                }
+                // We're looking for time t at which (t + gap) is an even multiple of nextBus's interval
+                if (((t + nextBus.getInterval() + nextBus.getGap())
+                        % nextBus.getInterval()) == 0) {
+                    // We found the time t where these buses are synced up (separated by 'gap')
+                    // So now keep looking forward, starting from the current time
+                    // and stepping by the interval of the next bus
+                    break;
+                }
+                t += interval;  // step the time
+            }
+            // Because everything is relatively prime, the next interval is the product of the two intervals so far
+            interval = interval * nextBus.getInterval();
+        }
+        return t;
     }
 
     // load inputs line-by-line and apply a regex to extract fields
     private void loadInputs(String pathToFile) {
-        busIntervals.clear();
+        buses.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
-            String line;
-            Integer nextInt = 0;
             /** Example Input:
              * 1000104
              * 41,x,x,x,x,x...
@@ -69,13 +96,15 @@ public class Day13Service {
             // process the bus schedule
             String line2 = br.readLine();
             String[] scheduleElements = line2.split(",");
-            for (String element : scheduleElements) {
+            for (int i = 0; i < scheduleElements.length; i++) {
+                String element = scheduleElements[i];
                 if (!element.equals(OUT_OF_SERVICE)) {
                     // If this bus is in service
                     // Add it to the known buses
-                    busIntervals.add(Long.parseLong(element));
+                    Bus bus = new Bus(Long.parseLong(element), i);
+                    buses.add(bus);
                 }
-                // else it's out of service; ignore it (for now?)
+                // else it's out of service; ignore it
             }
         } catch (Exception e) {
             System.out.println("Exception occurred: " + e.getMessage());
