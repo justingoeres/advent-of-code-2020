@@ -7,8 +7,8 @@ import org.junit.Test;
 public class Day13Test {
    @Test
    public void Day13A() {
-       final int EXPECTED = 0;
-       int result = 0;
+       final long EXPECTED = 115;
+       long result = 0;
        try {
            result = RunDay13.problem13A();
        } catch (Exception e) {
