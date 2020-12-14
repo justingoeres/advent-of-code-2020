@@ -58,7 +58,6 @@ public class Day14Service {
         }
         // When done, sum up the memory
         long result = cpu.getMemory().values().stream().reduce(0L, Long::sum);
-
         return result;
     }
 

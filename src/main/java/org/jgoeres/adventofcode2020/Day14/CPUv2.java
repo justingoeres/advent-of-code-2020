@@ -5,6 +5,15 @@ import java.util.HashSet;
 
 public class CPUv2 extends CPU {
     ArrayList<Long> masks = new ArrayList<>();
+    private static final int MAX_X = 9; // max number of x's in an input line
+
+    public CPUv2() {
+        // pre-populate all the possible 'mask' values we'll be shifting
+        for (long i = 0; i < Math.pow(2, MAX_X); i++) {
+            // First build all of them, 0 - ((2^number of X bits)-1)
+            masks.add(i);
+        }
+    }
 
     @Override
     public void setMemory(Long address, Long value) {
@@ -24,16 +33,10 @@ public class CPUv2 extends CPU {
 
         // If the bitmask bit is 1, the corresponding memory address bit is overwritten with 1.
         Long targetAddress = address | onesMask;
-        // If the bitmask bit is X, the corresponding memory address bit is floating.
-        // Build all the possible addresses implied by the floatMask
-        masks.clear();
-        for (long i = 0; i < Math.pow(2, floatMask.size()); i++) {
-            // First build all of them, 0 - ((2^number of X bits)-1)
-            masks.add(i);
-        }
+
         // For each of those possible address masks, shift the corresponding bit into
         // place in targetAddress to build the final set of addresses to write
-        for (int i = 0; i < masks.size(); i++) {
+        for (int i = 0; i < Math.pow(2,floatMask.size()); i++) {
             Long maskedAddress = targetAddress;
             Long currentMask = masks.get(i);
             // for each 'X' bit in the mask
@@ -43,9 +46,9 @@ public class CPUv2 extends CPU {
                 // targetAddress into our list of memory addresses to finally write
                 Long maskBitValue = currentMask & 1L;
                 if(maskBitValue == ZERO) {
-                    maskedAddress = maskedAddress & ~(1L << maskBitPosition);
+                    maskedAddress &= ~(1L << maskBitPosition);
                  } else if (maskBitValue == ONE) {
-                    maskedAddress = maskedAddress | (1L << maskBitPosition);
+                    maskedAddress |= (1L << maskBitPosition);
                 }
                 // Shift currentMask down and keep going
                 currentMask >>= 1;
