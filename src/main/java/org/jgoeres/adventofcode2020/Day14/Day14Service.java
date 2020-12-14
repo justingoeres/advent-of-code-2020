@@ -40,7 +40,6 @@ public class Day14Service {
         for (Op op : opList) {
             op.execute(cpu);
         }
-
         // When done, sum up the memory
         long result = cpu.getMemory().values().stream().reduce(0L, Long::sum);
 
@@ -57,7 +56,6 @@ public class Day14Service {
         for (Op op : opList) {
             op.execute(cpu);
         }
-
         // When done, sum up the memory
         long result = cpu.getMemory().values().stream().reduce(0L, Long::sum);
 
@@ -106,7 +104,6 @@ public class Day14Service {
                         } else if (c == ZERO) {
                             zeroesMask += (BIT << i);
                         } else if (c == X) {
-//                            floatMask += (BIT << i);
                             floatMask.add(i);   // add this bit to the list of floating ones
                         }
                     }

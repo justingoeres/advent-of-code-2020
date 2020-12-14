@@ -9,7 +9,7 @@ public abstract class RunDay14 {
 
         long result = day14Service.doPartA();
 
-        System.out.println("Day 14A: Answer = " + result);
+        System.out.println("Day 14A: Sum of all values in memory = " + result);
 
         return result;
     }
@@ -19,7 +19,7 @@ public abstract class RunDay14 {
 
         long result = day14Service.doPartB();
 
-        System.out.println("Day 14B: Answer = " + result);
+        System.out.println("Day 14B: Sum of all values in memory = " + result);
 
         return result;
     }

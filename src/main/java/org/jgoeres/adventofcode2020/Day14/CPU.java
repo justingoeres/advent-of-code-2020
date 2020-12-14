@@ -14,14 +14,6 @@ public class CPU {
     //    protected Long floatMask = ZERO;
     protected ArrayList<Integer> floatMask;
 
-    public Long getMemory(Long address) {
-        if (memory.containsKey(address)) {
-            return memory.get(address);
-        } else {
-            return ZERO;
-        }
-    }
-
     public void setMemory(Long address, Long value) {
         // Set the specified memory value, but handle the masks!
         // onesMask must keep all digits but replace the masked bits with 1s
@@ -47,10 +39,6 @@ public class CPU {
     public void setZeroesMask(Long zeroesMask) {
         this.zeroesMask = zeroesMask;
     }
-
-//    public void setFloatMask(Long floatMask) {
-//        this.floatMask = floatMask;
-//    }
 
     public void setFloatMask(ArrayList<Integer> floatMask) {
         this.floatMask = floatMask;
