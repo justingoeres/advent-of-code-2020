@@ -33,9 +33,22 @@ public class Day14Test {
        Assert.assertEquals(EXPECTED, result);
    }
 
+    @Test
+    public void Day14BExample2() {
+        Day14Service day14Service = new Day14Service("data/day14/example2.txt");
+        final long EXPECTED = 208L;
+        long result = 0;
+        try {
+            result = day14Service.doPartB();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(EXPECTED, result);
+    }
+
    @Test
    public void Day14B() {
-       final int EXPECTED = 0;
+       final long EXPECTED = 2737766154126L;
        long result = 0;
        try {
            result = RunDay14.problem14B();

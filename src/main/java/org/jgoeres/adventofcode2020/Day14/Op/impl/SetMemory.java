@@ -4,8 +4,8 @@ import org.jgoeres.adventofcode2020.Day14.CPU;
 import org.jgoeres.adventofcode2020.Day14.Op.Op;
 
 public class SetMemory implements Op {
-    private Long address = ZERO;
-    private Long value = ZERO;
+    private Long address;
+    private Long value;
 
     public SetMemory(Long address, Long value) {
         this.address = address;
@@ -14,6 +14,6 @@ public class SetMemory implements Op {
 
     @Override
     public void execute(CPU cpu) {
-        cpu.setMemory(address,value);
+        cpu.setMemory(address, value);
     }
 }

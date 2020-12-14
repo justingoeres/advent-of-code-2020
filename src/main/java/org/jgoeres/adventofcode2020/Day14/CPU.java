@@ -1,14 +1,18 @@
 package org.jgoeres.adventofcode2020.Day14;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CPU {
-    private static final Long ZERO = 0L;
-    private HashMap<Long, Long> memory = new HashMap<>();
+    protected static final Long ZERO = 0L;
+    protected static final Long ONE = 1L;
+    protected HashMap<Long, Long> memory = new HashMap<>();
 
     // init the masks
-    private Long onesMask = ZERO;
-    private Long zeroesMask = ZERO;
+    protected Long onesMask = ZERO;
+    protected Long zeroesMask = ZERO;
+    //    protected Long floatMask = ZERO;
+    protected ArrayList<Integer> floatMask;
 
     public Long getMemory(Long address) {
         if (memory.containsKey(address)) {
@@ -30,9 +34,10 @@ public class CPU {
         memory.put(address, value);
     }
 
-    public void setMasks(Long onesMask, Long zeroesMask) {
+    public void setMasks(Long onesMask, Long zeroesMask, ArrayList<Integer> floatMask) {
         setOnesMask(onesMask);
         setZeroesMask(zeroesMask);
+        setFloatMask(floatMask);
     }
 
     public void setOnesMask(Long onesMask) {
@@ -43,11 +48,19 @@ public class CPU {
         this.zeroesMask = zeroesMask;
     }
 
+//    public void setFloatMask(Long floatMask) {
+//        this.floatMask = floatMask;
+//    }
+
+    public void setFloatMask(ArrayList<Integer> floatMask) {
+        this.floatMask = floatMask;
+    }
+
     public HashMap<Long, Long> getMemory() {
         return memory;
     }
 
-    public void reset(){
+    public void reset() {
         onesMask = ZERO;
         zeroesMask = ZERO;
         memory.clear();

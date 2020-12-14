@@ -15,11 +15,11 @@ public class Day14Service {
 
     private static final Character ZERO = '0';
     private static final Character ONE = '1';
+    private static final Character X = 'X';
     private static final long BIT = 1L;
     private static boolean DEBUG = false;
 
     private ArrayList<Op> opList = new ArrayList<>();
-    private CPU cpu = new CPU();
 
     public Day14Service() {
         loadInputs(DEFAULT_INPUTS_PATH);
@@ -34,6 +34,7 @@ public class Day14Service {
          * Execute the initialization program.
          * What is the sum of all values left in memory after it completes?
          **/
+        CPU cpu = new CPU();
 
         // Run the program
         for (Op op : opList) {
@@ -47,8 +48,18 @@ public class Day14Service {
     }
 
     public long doPartB() {
-        int result = 0;
-        /** Put problem implementation here **/
+        CPUv2 cpu = new CPUv2();
+        /**
+         *  Execute the initialization program using an emulator for a version 2 decoder chip.
+         * What is the sum of all values left in memory after it completes?
+         * **/
+        // Run the program
+        for (Op op : opList) {
+            op.execute(cpu);
+        }
+
+        // When done, sum up the memory
+        long result = cpu.getMemory().values().stream().reduce(0L, Long::sum);
 
         return result;
     }
@@ -81,6 +92,8 @@ public class Day14Service {
                     maskString = new StringBuilder(maskString).reverse().toString();
                     long onesMask = 0L;
                     long zeroesMask = 0L;
+//                    long floatMask = 0L;
+                    ArrayList<Integer> floatMask = new ArrayList<>();
                     // Build the masks
                     for (int i = 0; i < maskString.length(); i++) {
                         // go character by character
@@ -92,9 +105,12 @@ public class Day14Service {
                             onesMask += (BIT << i);
                         } else if (c == ZERO) {
                             zeroesMask += (BIT << i);
+                        } else if (c == X) {
+//                            floatMask += (BIT << i);
+                            floatMask.add(i);   // add this bit to the list of floating ones
                         }
                     }
-                    opList.add(new Mask(onesMask, zeroesMask));
+                    opList.add(new Mask(onesMask, zeroesMask,floatMask));
                 } else if (m2.find()) {
                     // It's a memory set line
                     Long address = Long.parseLong(m2.group(1));
