@@ -1,29 +1,29 @@
 package org.jgoeres.adventofcode2020.Day15;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import java.util.Arrays;
 
 public class Day15Service {
-    private final String DEFAULT_INPUTS_PATH = "data/day15/input.txt";
+    private final String PROBLEM_INPUT = "0,14,1,3,7,9";
 
-    private static boolean DEBUG = false;
-
-    private ArrayList<Integer> inputList = new ArrayList<>();
+    static boolean DEBUG = true;
+    private Game game;
 
     public Day15Service() {
-        loadInputs(DEFAULT_INPUTS_PATH);
+        loadInputs(PROBLEM_INPUT);
     }
 
-    public Day15Service(String pathToFile) {
-        loadInputs(pathToFile);
+    public Day15Service(String line) {
+        loadInputs(line);
     }
 
-    public int doPartA() {
-        int result = 0;
-        /** Put problem implementation here **/
-
+    public long doPartA(long targetTurn) {
+        long result = 0;
+        /** Given your starting numbers, what will be the 2020th number spoken? **/
+        long answer = 0L;
+        for (long turn = game.getCurrentTurn(); turn < targetTurn; turn++) {   // Start from wherever init ended
+            answer = game.calculateNextAnswer();
+        }
+        result = answer;  // Answer is the last thing spoken when we finish
         return result;
     }
 
@@ -34,25 +34,15 @@ public class Day15Service {
         return result;
     }
 
+
     // load inputs line-by-line and apply a regex to extract fields
-    private void loadInputs(String pathToFile) {
-        inputList.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
-            String line;
-            Integer nextInt = 0;
-            /** Replace this regex **/
-            Pattern p = Pattern.compile("([FB]{7})([LR]{3})");
-            while ((line = br.readLine()) != null) {
-                // process the line.
-                Matcher m = p.matcher(line);
-                if (m.find()) { // If our regex matched this line
-                    // Parse it
-                    String field1 = m.group(1);
-                    String field2 = m.group(2);
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Exception occurred: " + e.getMessage());
-        }
+    private void loadInputs(String line) {
+            /**
+             * Example input:
+             * 0,14,1,3,7,9
+             * **/
+            long[] inputs = Arrays.stream(line.split(","))
+                    .mapToLong(num -> Long.parseLong(num)).toArray();
+            game = new Game(inputs);
     }
 }
