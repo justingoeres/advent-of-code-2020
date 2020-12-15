@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Day15Service {
     private final String PROBLEM_INPUT = "0,14,1,3,7,9";
 
-    static boolean DEBUG = true;
+    static boolean DEBUG = false;
     private Game game;
 
     public Day15Service() {
@@ -17,7 +17,7 @@ public class Day15Service {
     }
 
     public long doPartA(long targetTurn) {
-        long result = 0;
+        long result;
         /** Given your starting numbers, what will be the 2020th number spoken? **/
         long answer = 0L;
         for (long turn = game.getCurrentTurn(); turn < targetTurn; turn++) {   // Start from wherever init ended
@@ -27,8 +27,9 @@ public class Day15Service {
         return result;
     }
 
-    public int doPartB() {
-        int result = 0;
+    public long doPartB() {
+        final long TARGET_TURN_PART_B = 30000000L;
+        long result = doPartA(TARGET_TURN_PART_B);  // Part B is just like Part A, but longer
         /** Put problem implementation here **/
 
         return result;

@@ -114,8 +114,8 @@ public class Day15Test {
 
    @Test
    public void Day15B() {
-       final int EXPECTED = 0;
-       int result = 0;
+       final long EXPECTED = 1876406L;
+       long result = 0;
        try {
            result = RunDay15.problem15B();
        } catch (Exception e) {
