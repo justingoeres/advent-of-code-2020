@@ -79,15 +79,6 @@ public class TicketTranslationService {
             doPartA();
         }
 
-        // For each ticket field index (0-19)
-        // Make a Set of all potentially valid Rules for this field (it starts out as "All of them")
-//        HashMap<Integer, Set<String>> validRulesForField = new HashMap<>();
-//        for (int i = 0; i < myTicket.size(); i++) {
-//            // For each field, build the list of valid rules (all of them)
-//            Set<String> initialRules = new HashSet<>(rules.keySet());
-//            validRulesForField.put(i, initialRules);
-//        }
-
         // For each RULE
         for (Rule rule : rules.values()) {
             // Initialize its list of fields it can be valid for
@@ -138,7 +129,7 @@ public class TicketTranslationService {
                     for (Rule ruleToUpdate : rules.values()) {
                         ruleToUpdate.removeValidField(validFieldNum);
                     }
-                    // If this is a departure rule, multiple its value on myTicket to the running answer!
+                    // If this is a departure rule, multiply its value on myTicket to the running answer!
                     if (ruleName.startsWith("departure")) {
                         Integer fieldValue = myTicket.get(validFieldNum);
                         System.out.println("myTicket '" + ruleName + "':\t" + fieldValue);
@@ -151,10 +142,8 @@ public class TicketTranslationService {
                         }
                     }
                 }
-
             }
         }
-
     }
 
     // load inputs line-by-line and apply a regex to extract fields
@@ -162,14 +151,13 @@ public class TicketTranslationService {
         inputList.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;
-            Integer nextInt = 0;
             int fileSection = 0;
             /** Replace this regex **/
             Pattern p1 = Pattern.compile("(.*?):\\s+(\\d+)-(\\d+)\\s+or\\s+(\\d+)-(\\d+)");
             Pattern p2 = Pattern.compile("^\\d"); // all ticket lines start with a digit
             while ((line = br.readLine()) != null) {
                 if (line.equals("")) {
-                    //blank line, go to next section
+                    // blank line, go to next section
                     fileSection++;
                 } else {
                     Matcher m2 = p2.matcher(line);

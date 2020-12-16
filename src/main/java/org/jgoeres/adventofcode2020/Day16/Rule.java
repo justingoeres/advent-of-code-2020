@@ -1,6 +1,5 @@
 package org.jgoeres.adventofcode2020.Day16;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Rule {
