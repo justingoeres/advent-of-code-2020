@@ -9,17 +9,17 @@ public abstract class RunDay16 {
 
         int result = day16Service.doPartA();
 
-        System.out.println("Day 16A: Answer = " + result);
+        System.out.println("Day 16A: Ticket error rate = " + result);
 
         return result;
     }
 
-    public static int problem16B() {
+    public static long problem16B() {
         System.out.println("=== DAY 16B ===");
 
-        int result = day16Service.doPartB();
+        long result = day16Service.doPartB();
 
-        System.out.println("Day 16B: Answer = " + result);
+        System.out.println("Day 16B: Product of all 'departure' fields = " + result);
 
         return result;
     }
