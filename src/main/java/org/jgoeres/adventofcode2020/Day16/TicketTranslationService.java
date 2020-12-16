@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Day16Service {
+public class TicketTranslationService {
     private final String DEFAULT_INPUTS_PATH = "data/day16/input.txt";
 
     private static boolean DEBUG = false;
@@ -18,11 +18,11 @@ public class Day16Service {
     private ArrayList<ArrayList<Integer>> nearbyTickets = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> validTickets = new ArrayList<>();
 
-    public Day16Service() {
+    public TicketTranslationService() {
         loadInputs(DEFAULT_INPUTS_PATH);
     }
 
-    public Day16Service(String pathToFile) {
+    public TicketTranslationService(String pathToFile) {
         loadInputs(pathToFile);
     }
 
