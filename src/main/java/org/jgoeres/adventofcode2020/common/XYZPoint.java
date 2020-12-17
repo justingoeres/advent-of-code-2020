@@ -43,6 +43,5 @@ public class XYZPoint extends XYPoint {
     public int hashCode() {
         // Make the hash code things like (3,4,5) -> 500040003
         return (Objects.hash(getX(), getY(), z));
-
     }
 }
