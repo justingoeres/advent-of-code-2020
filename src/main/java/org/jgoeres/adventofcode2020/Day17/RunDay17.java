@@ -14,16 +14,13 @@ public abstract class RunDay17 {
         return result;
     }
 
-    public static int problem17B() {
+    public static long problem17B() {
         System.out.println("=== DAY 17B ===");
 
-        int result = day17Service.doPartB();
+        long result = day17Service.doPartB();
 
-        System.out.println("Day 17B: Answer = " + result);
+        System.out.println("Day 17B: Number of active hypercubes after 6 cycles = " + result);
 
         return result;
     }
-
-
-
 }
