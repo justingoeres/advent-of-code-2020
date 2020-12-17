@@ -4,12 +4,12 @@ public abstract class RunDay17 {
 
     static Day17Service day17Service = new Day17Service();
 
-    public static int problem17A() {
+    public static long problem17A() {
         System.out.println("=== DAY 17A ===");
 
-        int result = day17Service.doPartA();
+        long result = day17Service.doPartA();
 
-        System.out.println("Day 17A: Answer = " + result);
+        System.out.println("Day 17A: Number of active cubes after 6 cycles = " + result);
 
         return result;
     }
