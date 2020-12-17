@@ -6,17 +6,18 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.jgoeres.adventofcode2020.Day17.HyperCube.*;
 
 public class Day17Service {
-    private final String DEFAULT_INPUTS_PATH = "data/day17/input.txt";
-    HashMap<String, HyperCube> universe = new HashMap<String, HyperCube>();
-    HashMap<String, HyperCube> nextUniverse = new HashMap<String, HyperCube>();
+    private static final String DEFAULT_INPUTS_PATH = "data/day17/input.txt";
+    HashMap<String, HyperCube> universe = new HashMap<>();
+    HashMap<String, HyperCube> nextUniverse = new HashMap<>();
     HashMap<String, HyperCube> temp; // for swapping
 
-    HashMap<String, HyperCube> cubesToAdd = new HashMap<String, HyperCube>();
-    private static boolean DEBUG = false;
+    HashMap<String, HyperCube> cubesToAdd = new HashMap<>();
+    private static final boolean DEBUG = false;
 
     private static final ArrayList<XYZWPoint> neighbors = new ArrayList<>();
 
@@ -32,7 +33,7 @@ public class Day17Service {
 
     private void initNeighbors(boolean in4D) {
         neighbors.clear();
-        // Build the (static) array of all 26 XYZ neighbors' relative coordinates
+        // Build the (static) array of all neighbors' relative coordinates
         int wMin = in4D ? -1 : 0;
         int wMax = in4D ? 1 : 0;
         for (int w = wMin; w <= wMax; w++) {
@@ -84,7 +85,7 @@ public class Day17Service {
         cubesToAdd.clear();
         loadInputs(pathToFile);
         initNeighbors(true);
-        long result = 0;
+        long result;
         /** Starting with your given initial configuration,
          * simulate six cycles in a 4-dimensional space.
          *
@@ -189,16 +190,16 @@ public class Day17Service {
         return count;
     }
 
-    public long countAllActive(HashMap<String, HyperCube> universe) {
-        long count = universe.values().stream().filter(c -> c.isActive()).count();
-        return count;
+    public long countAllActive(Map<String, HyperCube> universe) {
+        return universe.values().stream().filter(HyperCube::isActive).count();
+
     }
 
     private String key(int x, int y, int z, int w) {
         return (x + ", " + y + ", " + z + ", " + w);
     }
 
-    public HyperCube getOrCreateCube(HashMap<String, HyperCube> universe, int x, int y, int z, int w) {
+    public HyperCube getOrCreateCube(Map<String, HyperCube> universe, int x, int y, int z, int w) {
         // Get the specified Cube from nextUniverse, or create it
         String universeKey = key(x, y, z, w);
         if (universe.containsKey(universeKey)) {
@@ -272,7 +273,7 @@ public class Day17Service {
                 for (Character c : line.toCharArray()) {
                     // Create an cube
                     HyperCube cube = new HyperCube(x, y, z, w, ACTIVE);  // assume active
-                    if (c == INACTIVE_CHAR) {
+                    if (c.equals(INACTIVE_CHAR)) {
                         // Set it inactive if necessary
                         cube.setActive(INACTIVE);
                     }
