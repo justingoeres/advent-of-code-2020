@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.jgoeres.adventofcode2020.Day17.HyperCube.*;
 
@@ -55,8 +56,8 @@ public class Day17Service {
          * Starting with your given initial configuration, simulate SIX cycles.
          * How many cubes are left in the active state after the sixth cycle?
          **/
-        System.out.println("Before any cycles:\n");
         if (DEBUG) {
+            System.out.println("Before any cycles:\n");
             printUniverse(universe);
         }
         for (int t = 0; t < TARGET_CYCLES; t++) {
@@ -120,7 +121,7 @@ public class Day17Service {
                     int neighborZ = cube.getZ() + neighbor.getZ();
                     int neighborW = cube.getW() + neighbor.getW();
                     String neighborKey = key(neighborX, neighborY, neighborZ, neighborW);
-                    // Create the neighbor in nextUniverse, if necessary
+                    // Create the neighbor in universe, if necessary
                     if (!(universe.containsKey(neighborKey))) {
                         cubesToAdd.put(neighborKey, new HyperCube(neighborX, neighborY, neighborZ, neighborW, HyperCube.INACTIVE));
                     }
@@ -131,39 +132,49 @@ public class Day17Service {
 
         // Now process every cube in the known universe AGAIN,
         // This time including any new cubes we just made
+        nextUniverse.clear();
         for (HyperCube cube : universe.values()) {
-            HyperCube nextCube = getOrCreateCube(nextUniverse, cube.getX(), cube.getY(), cube.getZ(), cube.getW());
-            nextCube.setActive(cube.isActive());    // nextCube starts off in same state as current cube
+//            HyperCube nextCube = getOrCreateCube(nextUniverse, cube.getX(), cube.getY(), cube.getZ(), cube.getW());
+//            nextCube.setActive(cube.isActive());    // nextCube starts off in same state as current cube
             // Apply rules:
             int activeNeighbors = countActiveNeighbors(cube);
+            if (DEBUG) {
+                System.out.print("\n" + cube.toString()
+                        + "\t" + (cube.isActive() ? "ACTIVE" : "inactive")
+                        + "\t" + activeNeighbors);
+            }
             if (cube.isActive()) {
-                if (DEBUG) {
-                    System.out.println("cube = " + cube);
-                    System.out.println("nextCube = " + nextCube);
-                    System.out.println("cube.active = " + cube.isActive());
-                    System.out.println("activeNeighbors = " + activeNeighbors);
-                }
                 // If a cube is active and exactly 2 or 3 of its neighbors are also active,
                 //   the cube remains active. Otherwise, the cube becomes inactive.
-                if (!(activeNeighbors == 2
-                        || activeNeighbors == 3)) {
-                    // set inactive
-                    nextCube.setActive(INACTIVE);
+                if (activeNeighbors == 2 || activeNeighbors == 3) {
+                    // cube remains active
+                    HyperCube nextCube = getOrCreateCube(nextUniverse, cube.getX(), cube.getY(), cube.getZ(), cube.getW());
+                    nextCube.setActive(ACTIVE);
+                } else {
+                    if (DEBUG) {
+                        System.out.print("\t" + "--> inactive");
+                    }
                 }
+                // else cube becomes inactive
+                // don't need to set anything, just don't add it to nextUniverse
+//                    nextCube.setActive(INACTIVE);
             } else {
                 // If a cube is inactive but exactly 3 of its neighbors are active,
                 //   the cube becomes active. Otherwise, the cube remains inactive.
-                activeNeighbors = countActiveNeighbors(cube);
                 if (activeNeighbors == 3) {
                     // set active
+                    HyperCube nextCube = getOrCreateCube(nextUniverse, cube.getX(), cube.getY(), cube.getZ(), cube.getW());
                     nextCube.setActive(ACTIVE);
+                    if (DEBUG) {
+                        System.out.print("\t" + "--> ACTIVE");
+                    }
                 }
             }
-            if (DEBUG) {
-                System.out.println("nextCube.active = " + nextCube.isActive() + "\n");
-            }
-            // Update nextCube in nextUniverse
         }
+        // Strip all the inactive cubes out of nextUniverse
+        nextUniverse = ((HashMap<String, HyperCube>) nextUniverse.entrySet().stream()
+                .filter(c -> c.getValue().isActive())
+                .collect(Collectors.toMap(c -> c.getKey(), c -> c.getValue())));
         // Swap the universes for the next timer tick
         temp = nextUniverse;
         nextUniverse = universe;
@@ -184,7 +195,7 @@ public class Day17Service {
             if (universe.containsKey(neighborKey)
                     && universe.get(neighborKey).isActive()) {
                 count++;
-                if (count > MAX_COUNT) return count;    // Return early if we find enough
+//                if (count > MAX_COUNT) return count;    // Return early if we find enough
             }
         }
         return count;
@@ -234,9 +245,9 @@ public class Day17Service {
             if (cube.getW() < minW) minW = cube.getW();
         }
 
-        for (int w = minW; w < maxW; w++) {
+        for (int w = minW; w <= maxW; w++) {
             for (int z = minZ; z <= maxZ; z++) {
-                System.out.println("z=" + z);
+                System.out.println("\nz=" + z);
                 System.out.println("X = " + minX + "-" + maxX);
                 System.out.println("Y = " + minY + "-" + maxY);
                 for (int y = minY; y <= maxY; y++) {
@@ -272,13 +283,12 @@ public class Day17Service {
                 x = 0;
                 for (Character c : line.toCharArray()) {
                     // Create an cube
-                    HyperCube cube = new HyperCube(x, y, z, w, ACTIVE);  // assume active
-                    if (c.equals(INACTIVE_CHAR)) {
-                        // Set it inactive if necessary
-                        cube.setActive(INACTIVE);
+                    HyperCube cube = null;  // assume active
+                    if (c.equals(ACTIVE_CHAR)) {
+                        cube = new HyperCube(x, y, z, w, ACTIVE);
+                        // Add it to the universe
+                        universe.put(cube.toString(), cube);
                     }
-                    // Add it to the universe
-                    universe.put(cube.toString(), cube);
                     x++;    // next char x-coord
                 }
                 y++;    // next char y-coord

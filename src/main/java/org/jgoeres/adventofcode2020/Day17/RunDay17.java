@@ -24,3 +24,4 @@ public abstract class RunDay17 {
         return result;
     }
 }
+    
