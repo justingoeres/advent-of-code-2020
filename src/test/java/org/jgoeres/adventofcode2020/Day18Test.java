@@ -15,7 +15,7 @@ public class Day18Test {
         final BigInteger EXPECTED = BigInteger.valueOf(71);
         BigInteger result = BigInteger.ZERO;
         try {
-            result = day18Service.evaluate("1 + 2 * 3 + 4 * 5 + 6");
+            result = day18Service.evaluatePartA("1 + 2 * 3 + 4 * 5 + 6");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -28,7 +28,7 @@ public class Day18Test {
         final BigInteger EXPECTED = BigInteger.valueOf(51);
         BigInteger result = BigInteger.ZERO;
         try {
-            result = day18Service.evaluate("1 + (2 * 3) + (4 * (5 + 6))");
+            result = day18Service.evaluatePartA("1 + (2 * 3) + (4 * (5 + 6))");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -41,7 +41,7 @@ public class Day18Test {
         final BigInteger EXPECTED = BigInteger.valueOf(26);
         BigInteger result = BigInteger.ZERO;
         try {
-            result = day18Service.evaluate("2 * 3 + (4 * 5)");
+            result = day18Service.evaluatePartA("2 * 3 + (4 * 5)");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -54,7 +54,7 @@ public class Day18Test {
         final BigInteger EXPECTED = BigInteger.valueOf(437);
         BigInteger result = BigInteger.ZERO;
         try {
-            result = day18Service.evaluate("5 + (8 * 3 + 9 + 3 * 4 * 3)");
+            result = day18Service.evaluatePartA("5 + (8 * 3 + 9 + 3 * 4 * 3)");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -67,7 +67,7 @@ public class Day18Test {
         final BigInteger EXPECTED = BigInteger.valueOf(12240);
         BigInteger result = BigInteger.ZERO;
         try {
-            result = day18Service.evaluate("5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))");
+            result = day18Service.evaluatePartA("5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -80,7 +80,7 @@ public class Day18Test {
         final BigInteger EXPECTED = BigInteger.valueOf(13632);
         BigInteger result = BigInteger.ZERO;
         try {
-            result = day18Service.evaluate("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2");
+            result = day18Service.evaluatePartA("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -125,6 +125,99 @@ public class Day18Test {
     }
 
     @Test
+    public void Day18BExample1() {
+        Day18Service day18Service = new Day18Service();
+        final BigInteger EXPECTED = BigInteger.valueOf(231);
+        BigInteger result = BigInteger.ZERO;
+        try {
+            result = day18Service.evaluatePartB("1 + 2 * 3 + 4 * 5 + 6");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(EXPECTED, result);
+    }
+
+    @Test
+    public void Day18BExample2() {
+        Day18Service day18Service = new Day18Service();
+        final BigInteger EXPECTED = BigInteger.valueOf(51);
+        BigInteger result = BigInteger.ZERO;
+        try {
+            result = day18Service.evaluatePartB("1 + (2 * 3) + (4 * (5 + 6))");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(EXPECTED, result);
+    }
+
+    @Test
+    public void Day18BExample3() {
+        Day18Service day18Service = new Day18Service();
+        final BigInteger EXPECTED = BigInteger.valueOf(46);
+        BigInteger result = BigInteger.ZERO;
+        try {
+            result = day18Service.evaluatePartB("2 * 3 + (4 * 5)");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(EXPECTED, result);
+    }
+
+    @Test
+    public void Day18BExample4() {
+        Day18Service day18Service = new Day18Service();
+        final BigInteger EXPECTED = BigInteger.valueOf(1445);
+        BigInteger result = BigInteger.ZERO;
+        try {
+            result = day18Service.evaluatePartB("5 + (8 * 3 + 9 + 3 * 4 * 3)");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(EXPECTED, result);
+    }
+
+    @Test
+    public void Day18BExample5() {
+        Day18Service day18Service = new Day18Service();
+        final BigInteger EXPECTED = BigInteger.valueOf(669060);
+        BigInteger result = BigInteger.ZERO;
+        try {
+            result = day18Service.evaluatePartB("5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(EXPECTED, result);
+    }
+
+    @Test
+    public void Day18BExample6() {
+        Day18Service day18Service = new Day18Service();
+        final BigInteger EXPECTED = BigInteger.valueOf(23340);
+        BigInteger result = BigInteger.ZERO;
+        try {
+            result = day18Service.evaluatePartB("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2");
+//            result = day18Service.evaluatePartB("2 + ((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 4 * 2");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(EXPECTED, result);
+    }
+
+    @Test
+    public void Day18BPuzzleLine8() {
+        Day18Service day18Service = new Day18Service();
+        final BigInteger EXPECTED = BigInteger.valueOf(1512);
+        BigInteger result = BigInteger.ZERO;
+        try {
+            result = day18Service.evaluatePartB("(5 + 5) + 2 + 4 + 5 * (8 * 9)");
+//            result = day18Service.evaluatePartB("2 + ((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 4 * 2");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(EXPECTED, result);
+    }
+
+    @Test
     public void Day18B() {
         final BigInteger EXPECTED = BigInteger.valueOf(0);
         BigInteger result = BigInteger.ZERO;
@@ -133,6 +226,7 @@ public class Day18Test {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        // 323354829009997 too high
         Assert.assertEquals(EXPECTED, result);
     }
 }

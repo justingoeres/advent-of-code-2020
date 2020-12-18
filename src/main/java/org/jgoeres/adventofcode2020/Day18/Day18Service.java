@@ -32,13 +32,12 @@ public class Day18Service {
     }
 
     public BigInteger doPartA() {
-        long result = 0;
         /**
          * Evaluate the expression on each line of the homework;
          * what is the sum of the resulting values? **/
         BigInteger sum = BigInteger.ZERO;
         for (String expression : inputList) {
-            BigInteger value = evaluate(expression);
+            BigInteger value = evaluatePartA(expression);
             System.out.println(value);
             sum = sum.add(value);
         }
@@ -47,48 +46,7 @@ public class Day18Service {
         return sum;
     }
 
-//    public long evaluate_old(String expression) {
-//
-//        // build the stack
-//        for (int i = 0; i < expression.length(); i++) {
-//            Character c = expression.charAt(i);
-//            switch (c) {
-//                case SPACE:
-//                    // skip spaces
-//                    break;
-//                case ADD_CHAR:
-//                    stack.push(Op.ADD.getValue());
-//                    break;
-//                case MULTIPLY_CHAR:
-//                    stack.push(Op.MULTIPLY.getValue());
-//                    break;
-//                case OPEN_CHAR:
-//                    stack.push(Op.OPEN.getValue());
-//                    break;
-//                case CLOSE_CHAR:
-//                    stack.push(Op.CLOSE.getValue());
-//                    break;
-//                default:
-//                    // It's a number!
-//                    stack.push(Integer.parseInt(c.toString()));
-//            }
-//        }
-//
-//        // Process the stack
-//
-//        // Find all the groups of parentheses
-//        ParenGroup newParenGroup = null;
-//        for (int i = 0; i < expression.length(); i++) {
-//            Character c = expression.charAt(i);
-//            if (c == '(') {
-//                // Start a new group
-//            }
-//        }
-//        return 0;
-//    }
-
-
-    public BigInteger evaluate(String expression) {
+    public BigInteger evaluatePartA(String expression) {
         current = new AccAndOp();
         // Go left to right in the expression evaluating + and *
         // Recurse when we hit a (
@@ -106,7 +64,6 @@ public class Day18Service {
             } else if (c == ')') {
                 arg = current.accumulator;
                 current = stack.pop();
-                // TODO Pop the stack and process the operation
             } else if (c == '+') {
                 current.operation = ADD;
                 continue;
@@ -134,24 +91,92 @@ public class Day18Service {
 
 
     public BigInteger doPartB() {
-        BigInteger result = BigInteger.ZERO;
-        /** Put problem implementation here **/
-
-        return result;
-    }
-
-    public int findClosingParen(String expression, int index) {
-        // Scan forward in the expression to find the closing paren that corresponds
-        // to the opening one
-        int i;
-        for (i = index; i < expression.length(); i++) {
-            // go deeper!
-            Character c = expression.charAt(i);
-            if (c == '(') i = findClosingParen(expression, i + 1);
-            if (c == ')') return i + 1;
+        /**
+         * Now, addition and multiplication have different precedence levels,
+         * but they're not the ones you're familiar with. Instead, addition
+         * is evaluated before multiplication.
+         *
+         * What do you get if you add up the results of evaluating the homework
+         * problems using these new rules?
+         **/
+        BigInteger sum = BigInteger.ZERO;
+        for (String expression : inputList) {
+            System.out.println(expression);
+            BigInteger value = evaluatePartB(expression);
+            System.out.println("\t\t= " + value);
+            sum = sum.add(value);
         }
-        return i - 1; // should never get here
+        return sum;
     }
+
+    public BigInteger evaluatePartB(String expression) {
+        current = new AccAndOp();
+        // Go left to right in the expression evaluating + and *
+        // Recurse when we hit a (
+        // Return when we hit a ) or the end of the line
+        BigInteger arg;
+        for (int i = 0; i < expression.length(); i++) {
+            Character c = expression.charAt(i);
+            if (c == ' ') continue; // skip spaces
+            else if (c == '(') {
+                if (current.accumulator.compareTo(BigInteger.ZERO) == 1) {
+                    // Put the current operation on the stack
+                    stack.push(current);
+                    // Start a new operation
+                    current = new AccAndOp();
+                }
+                continue;
+            } else if (c == ')') {
+                arg = current.accumulator;
+                if (!stack.isEmpty()) {
+                    current = stack.pop();
+                } else {
+                    continue;
+                }
+            } else if (c == '+') {
+                current.operation = ADD;
+                continue;
+            } else if (c == '*') {
+                current.operation = Op.MULTIPLY;
+                // Put the current (multiply) operation on the stack to process later
+                stack.push(current);
+                current = new AccAndOp();
+                continue;
+            } else {
+                // It's a number; parse it
+                arg = BigInteger.valueOf(Long.parseLong(c.toString()));
+            }
+            if (arg != null) {
+                switch (current.operation) {
+                    case ADD:
+                        current.accumulator = current.accumulator.add(arg);
+                        break;
+                    case MULTIPLY:
+                        current.accumulator = current.accumulator.multiply(arg);
+                        break;
+                }
+            }
+        }
+        // When we get here do we just have multiplications on the stack??
+
+        BigInteger total = BigInteger.ZERO;
+        while (!stack.isEmpty()) {
+            AccAndOp stackOp = stack.pop();
+            switch (stackOp.operation) {
+                case ADD:
+                    current.accumulator = current.accumulator.add(stackOp.accumulator);
+                    break;
+                case MULTIPLY:
+                    current.accumulator = current.accumulator.multiply(stackOp.accumulator);
+                    break;
+            }
+        }
+        return current.accumulator;
+//        BigInteger stackResult = stack.stream().map(AccAndOp::getAccumulator)
+//                .reduce(BigInteger.ONE, (a, b) -> a.multiply(b));
+//        return current.accumulator.multiply(stackResult);
+    }
+
 
     // load inputs line-by-line - interpret them later
     private void loadInputs(String pathToFile) {
@@ -167,11 +192,6 @@ public class Day18Service {
             while ((line = br.readLine()) != null) {
                 inputList.add(line);
                 // process the line.
-//                Matcher m = p.matcher(line);
-//                if (m.find()) { // If our regex matched this line
-//                    // Parse it
-//                    String field1 = m.group(1);
-//                    String field2 = m.group(2);
             }
 
         } catch (

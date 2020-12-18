@@ -13,4 +13,8 @@ public class AccAndOp {
         this.accumulator = accumulator;
         this.operation = operation;
     }
+
+    public BigInteger getAccumulator() {
+        return accumulator;
+    }
 }
