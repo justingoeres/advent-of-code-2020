@@ -2,6 +2,7 @@ package org.jgoeres.adventofcode2020.Day18;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -20,7 +21,7 @@ public class Day18Service {
     private static final char SPACE = ' ';
 
     private Stack<AccAndOp> stack = new Stack<>();
-    AccAndOp current = new AccAndOp(0, ADD);
+    AccAndOp current = new AccAndOp(BigInteger.ZERO, ADD);
 
     public Day18Service() {
         loadInputs(DEFAULT_INPUTS_PATH);
@@ -30,16 +31,16 @@ public class Day18Service {
         loadInputs(pathToFile);
     }
 
-    public long doPartA() {
+    public BigInteger doPartA() {
         long result = 0;
         /**
          * Evaluate the expression on each line of the homework;
          * what is the sum of the resulting values? **/
-        long sum = 0;
+        BigInteger sum = BigInteger.ZERO;
         for (String expression : inputList) {
-            long value = evaluate(expression);
+            BigInteger value = evaluate(expression);
             System.out.println(value);
-            sum += value;
+            sum = sum.add(value);
         }
 
         System.out.println(sum);
@@ -87,12 +88,12 @@ public class Day18Service {
 //    }
 
 
-    public long evaluate(String expression) {
-
+    public BigInteger evaluate(String expression) {
+        current = new AccAndOp();
         // Go left to right in the expression evaluating + and *
         // Recurse when we hit a (
         // Return when we hit a ) or the end of the line
-        Long arg;
+        BigInteger arg;
         for (int i = 0; i < expression.length(); i++) {
             Character c = expression.charAt(i);
             if (c == ' ') continue; // skip spaces
@@ -114,15 +115,15 @@ public class Day18Service {
                 continue;
             } else {
                 // It's a number; parse it
-                arg = Long.parseLong(c.toString());
+                arg = BigInteger.valueOf(Long.parseLong(c.toString()));
             }
             if (arg != null) {
                 switch (current.operation) {
                     case ADD:
-                        current.accumulator += arg;
+                        current.accumulator = current.accumulator.add(arg);
                         break;
                     case MULTIPLY:
-                        current.accumulator *= arg;
+                        current.accumulator = current.accumulator.multiply(arg);
                         break;
                 }
             }
@@ -132,8 +133,8 @@ public class Day18Service {
     }
 
 
-    public long doPartB() {
-        long result = 0;
+    public BigInteger doPartB() {
+        BigInteger result = BigInteger.ZERO;
         /** Put problem implementation here **/
 
         return result;
