@@ -12,7 +12,7 @@ public abstract class RunDay18 {
 
         BigInteger result = day18Service.doPartA();
 
-        System.out.println("Day 18A: Answer = " + result);
+        System.out.println("Day 18A: Sum of all homework results = " + result);
 
         return result;
     }
@@ -22,7 +22,7 @@ public abstract class RunDay18 {
 
         BigInteger result = day18Service.doPartB();
 
-        System.out.println("Day 18B: Answer = " + result);
+        System.out.println("Day 18B: Sum of all homework results = " + result);
 
         return result;
     }

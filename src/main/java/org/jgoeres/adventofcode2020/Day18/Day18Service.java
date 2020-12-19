@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
-import static org.jgoeres.adventofcode2020.Day18.Op.ADD;
+import static org.jgoeres.adventofcode2020.Day18.Op.*;
 
 public class Day18Service {
     private final String DEFAULT_INPUTS_PATH = "data/day18/input.txt";
@@ -14,11 +16,15 @@ public class Day18Service {
     private static boolean DEBUG = false;
     private ArrayList<String> inputList = new ArrayList<>();
 
-    private static final char ADD_CHAR = '+';
-    private static final char MULTIPLY_CHAR = '*';
+
     private static final char OPEN_CHAR = '(';
     private static final char CLOSE_CHAR = ')';
-    private static final char SPACE = ' ';
+
+    private static final String ADD_STR = "+";
+    private static final String MULTIPLY_STR = "*";
+    private static final String OPEN_STR = "(";
+    private static final String CLOSE_STR = ")";
+    private static final String SPACE_STR = " ";
 
     private Stack<AccAndOp> stack = new Stack<>();
     AccAndOp current = new AccAndOp(BigInteger.ZERO, ADD);
@@ -38,11 +44,11 @@ public class Day18Service {
         BigInteger sum = BigInteger.ZERO;
         for (String expression : inputList) {
             BigInteger value = evaluatePartA(expression);
-            System.out.println(value);
+            if (DEBUG) {
+                System.out.println(value);
+            }
             sum = sum.add(value);
         }
-
-        System.out.println(sum);
         return sum;
     }
 
@@ -101,82 +107,113 @@ public class Day18Service {
          **/
         BigInteger sum = BigInteger.ZERO;
         for (String expression : inputList) {
-            System.out.println(expression);
+            if (DEBUG) {
+                System.out.println(expression);
+            }
             BigInteger value = evaluatePartB(expression);
-            System.out.println("\t\t= " + value);
+            if (DEBUG) {
+                System.out.println("\t\t= " + value);
+            }
             sum = sum.add(value);
         }
         return sum;
     }
 
     public BigInteger evaluatePartB(String expression) {
-        current = new AccAndOp();
-        // Go left to right in the expression evaluating + and *
-        // Recurse when we hit a (
-        // Return when we hit a ) or the end of the line
-        BigInteger arg;
-        for (int i = 0; i < expression.length(); i++) {
-            Character c = expression.charAt(i);
-            if (c == ' ') continue; // skip spaces
-            else if (c == '(') {
-                if (current.accumulator.compareTo(BigInteger.ZERO) == 1) {
-                    // Put the current operation on the stack
-                    stack.push(current);
-                    // Start a new operation
-                    current = new AccAndOp();
+        // Process the expression by finding subexpressions enclosed by ( ) and evaluating those.
+        // Each time we process one, REPLACE it in the expression with the subexpression result, and then start over.
+        // When we run out of parentheses, then do a final evaluation.
+        BigInteger result;
+        Character c;
+        int pBegin = 0;
+        int pEnd = 0;
+        while (true) {
+            boolean found = false;
+            for (int i = 0; i < expression.length(); i++) {
+                c = expression.charAt(i);
+                // Go until we find a CLOSE
+                if (c == OPEN_CHAR) {
+                    // Every time we find an OPEN, note it
+                    pBegin = i;
+                    found = true;
+                } else if (c == CLOSE_CHAR) {
+                    pEnd = i;
+                    break; // When we find a set of (...), process it
                 }
+            }
+            if (found) {
+                // If we found a set of (...)
+                // Evaluate the stuff inside it
+                String subexpression = expression.substring(pBegin, pEnd + 1);
+                BigInteger subExpressionResult = evaluate(subexpression);
+                // Now that we have a result, REPLACE the parens with the result.
+                expression = expression.replace(subexpression, subExpressionResult.toString());
+                // And iterate to scan the new simplified expression
+            } else {
+                // No parens left, evaluate the remaining bits to get the final result
+                result = evaluate(expression);
+                break;  // and we're done!
+            }
+        }
+        return result;
+    }
+
+    public BigInteger evaluate(String expression) {
+        Stack<BigInteger> argStack = new Stack<>();
+        Stack<Op> opStack = new Stack<>();
+
+        BigInteger arg = BigInteger.ZERO;
+        BigInteger arg2;
+
+        expression = expression.replace("(", "").replace(")", "");
+        List<String> splitExpression = Arrays.asList(expression.split(" "));
+        for (String element : splitExpression) {
+            if ((element.equals(SPACE_STR)) || (element.equals(OPEN_STR)) || (element.equals(CLOSE_STR))) {
+                // skip spaces & parens
                 continue;
-            } else if (c == ')') {
-                arg = current.accumulator;
-                if (!stack.isEmpty()) {
-                    current = stack.pop();
-                } else {
-                    continue;
-                }
-            } else if (c == '+') {
-                current.operation = ADD;
+            } else if (element.equals(ADD_STR)) {
+                opStack.push(ADD);
                 continue;
-            } else if (c == '*') {
-                current.operation = Op.MULTIPLY;
+            } else if (element.equals(MULTIPLY_STR)) {
                 // Put the current (multiply) operation on the stack to process later
-                stack.push(current);
-                current = new AccAndOp();
+                opStack.push(MULTIPLY);
                 continue;
             } else {
                 // It's a number; parse it
-                arg = BigInteger.valueOf(Long.parseLong(c.toString()));
+                arg = BigInteger.valueOf(Long.parseLong(element));
             }
             if (arg != null) {
-                switch (current.operation) {
+                // Peek at the top of the stack. If it's an ADD, process it immediately
+                if (!opStack.isEmpty() && opStack.peek() == ADD) {
+                    // Pop both stacks; store the argStack element for immediate use
+                    opStack.pop();  // Get rid of the ADD
+                    arg2 = argStack.pop();
+                    arg = arg.add(arg2);    // ADD them
+                }
+                // store the result back on the stack, or put the new number there
+                argStack.push(arg);
+            }
+        }
+        if (!argStack.isEmpty()) {
+            while (!opStack.isEmpty()) {
+                Op op = opStack.pop();
+                arg = argStack.pop(); // get the first argument
+                arg2 = argStack.pop();
+                switch (op) {
                     case ADD:
-                        current.accumulator = current.accumulator.add(arg);
+                        arg = arg.add(arg2);
+                        argStack.push(arg);
                         break;
                     case MULTIPLY:
-                        current.accumulator = current.accumulator.multiply(arg);
+                        arg = arg.multiply(arg2);
+                        argStack.push(arg);
                         break;
                 }
             }
         }
-        // When we get here do we just have multiplications on the stack??
-
-        BigInteger total = BigInteger.ZERO;
-        while (!stack.isEmpty()) {
-            AccAndOp stackOp = stack.pop();
-            switch (stackOp.operation) {
-                case ADD:
-                    current.accumulator = current.accumulator.add(stackOp.accumulator);
-                    break;
-                case MULTIPLY:
-                    current.accumulator = current.accumulator.multiply(stackOp.accumulator);
-                    break;
-            }
-        }
-        return current.accumulator;
-//        BigInteger stackResult = stack.stream().map(AccAndOp::getAccumulator)
-//                .reduce(BigInteger.ONE, (a, b) -> a.multiply(b));
-//        return current.accumulator.multiply(stackResult);
+        // The final result of the (sub)expression will be in arg. Return it.
+        return arg;
     }
-
 
     // load inputs line-by-line - interpret them later
     private void loadInputs(String pathToFile) {

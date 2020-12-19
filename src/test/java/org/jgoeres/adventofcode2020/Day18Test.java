@@ -196,7 +196,6 @@ public class Day18Test {
         BigInteger result = BigInteger.ZERO;
         try {
             result = day18Service.evaluatePartB("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2");
-//            result = day18Service.evaluatePartB("2 + ((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 4 * 2");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -210,7 +209,6 @@ public class Day18Test {
         BigInteger result = BigInteger.ZERO;
         try {
             result = day18Service.evaluatePartB("(5 + 5) + 2 + 4 + 5 * (8 * 9)");
-//            result = day18Service.evaluatePartB("2 + ((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 4 * 2");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -219,14 +217,13 @@ public class Day18Test {
 
     @Test
     public void Day18B() {
-        final BigInteger EXPECTED = BigInteger.valueOf(0);
+        final BigInteger EXPECTED = BigInteger.valueOf(297139939002972L);
         BigInteger result = BigInteger.ZERO;
         try {
             result = RunDay18.problem18B();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        // 323354829009997 too high
         Assert.assertEquals(EXPECTED, result);
     }
 }
