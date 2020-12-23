@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +12,7 @@ public class Day19Service {
     private final String DEFAULT_INPUTS_PATH = "data/day19/input.txt";
     private static final String EMPTY = "";
     private static final String SPACE = " ";
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     private ArrayList<String> inputList = new ArrayList<>();
     public HashMap<Integer, Rule> allRules = new HashMap<>();
@@ -39,10 +38,6 @@ public class Day19Service {
         }
 
         Pattern p = Pattern.compile(rule0Regex);
-//        for (Rule rule : allRules.values()) {
-//            System.out.println("Rule #" + rule.getRuleNum()
-//                    + ":\t" + rule.expandBranch1Match());
-//        }
         int i = 0;
         for (String line : inputList) {
             Matcher m = p.matcher(line);
@@ -55,14 +50,6 @@ public class Day19Service {
         return count;
     }
 
-    public int countMatches(String s, Rule rule) {
-        int count = 0;
-        // Test s against all the branches of this rule, all the way down
-
-
-        return count;
-    }
-
     public int doPartB() {
         int count = 0;
         /** completely replace rules 8: 42 and 11: 42 31
@@ -70,24 +57,6 @@ public class Day19Service {
          * 8: 42 | 42 8
          * 11: 42 31 | 42 11 31
          **/
-
-        // Fix rule 8
-        // 8: 42 | 42 8
-//        RegularRule toFix = (RegularRule) allRules.get(8);
-//        toFix.reset();
-//        toFix.addBranch1(allRules.get(42));
-//        toFix.addBranch2(allRules.get(42));
-//        toFix.addBranch2(allRules.get(8));
-//
-//        // Fix rule 1
-//        // 11: 42 31 | 42 11 31
-//        toFix = (RegularRule) allRules.get(11);
-//        toFix.reset();
-//        toFix.addBranch1(allRules.get(42));
-//        toFix.addBranch1(allRules.get(31));
-//        toFix.addBranch2(allRules.get(42));
-//        toFix.addBranch2(allRules.get(11));
-//        toFix.addBranch2(allRules.get(31));
 
         // Let's pretend we're smart!
         // Rule 0:
@@ -127,9 +96,6 @@ public class Day19Service {
         // Both are already enclosed in non-capturing groups, so we can just concat them
         String regex = rule42regex + rule42regex + "+" + rule31regex + "+";
 
-//        Rule rule0 = allRules.get(0);
-//        String rule0Regex = rule0.makeRegex();
-
         if (DEBUG) {
             System.out.println("To match:\t" + regex);
         }
@@ -139,16 +105,13 @@ public class Day19Service {
         // Anchor the p42 & p31 at the beginning of the strings
         Pattern p42 = Pattern.compile("^" + rule42regex);
         Pattern p31 = Pattern.compile("^" + rule31regex);
-//        for (Rule rule : allRules.values()) {
-//            System.out.println("Rule #" + rule.getRuleNum()
-//                    + ":\t" + rule.expandBranch1Match());
-//        }
         int i = 0;
         for (String line : inputList) {
+            // First check if this line matches the large pattern
             Matcher m = p.matcher(line);
             if (m.matches()) {
-                if (DEBUG) System.out.println("input #" + i + "\t" + line + " matches; checking valid counts");
                 // If this matched the giant regex, make sure it has a valid number of 42 & 31 matches.
+                if (DEBUG) System.out.println("input #" + i + "\t" + line + " matches; checking valid counts");
 
                 // Chop up the string to iteratively match Rule 42s, then Rule 312.
                 int match42count = 0;
@@ -169,7 +132,6 @@ public class Day19Service {
 
                 if (DEBUG) System.out.println("\t" + "Rule 42: " + match42count + "\tRule 31: " + match31count);
                 // There must be MORE 42 matches than 31 matches
-                // (and let's just hope the input doesn't have any tricky ones where they're out of order)
                 if (match31count > 0 && match42count > match31count) {
                     if (DEBUG) System.out.println("\tVALID");
                     count++;
@@ -180,12 +142,7 @@ public class Day19Service {
                 }
             }
             if (DEBUG) i++;
-
         }
-
-        // Now we have a (smaller) set of input lines that match 42 42+ 31+
-        // But the actual set of matches is smaller because of the way the recursion is set up.
-
         return count;
     }
 

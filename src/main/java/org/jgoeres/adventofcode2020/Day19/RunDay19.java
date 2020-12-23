@@ -9,7 +9,7 @@ public abstract class RunDay19 {
 
         int result = day19Service.doPartA();
 
-        System.out.println("Day 19A: Answer = " + result);
+        System.out.println("Day 19A: Total matches of Rule 0 = " + result);
 
         return result;
     }
@@ -19,7 +19,7 @@ public abstract class RunDay19 {
 
         int result = day19Service.doPartB();
 
-        System.out.println("Day 19B: Answer = " + result);
+        System.out.println("Day 19B: Total matches of Rule 0 after modifications = " + result);
 
         return result;
     }

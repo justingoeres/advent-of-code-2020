@@ -11,14 +11,6 @@ public abstract class AbstractRule implements Rule {
         this.ruleNum = ruleNum;
     }
 
-    public void reset() {
-        return;
-    }
-    public int testMatch(String s, int i){
-        // Does the incoming String s match at all characters below this one?
-
-    return 0;}
-
     @Override
     public String makeRegex() {
         return null;
