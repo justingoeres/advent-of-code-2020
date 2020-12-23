@@ -10,4 +10,6 @@ public interface Rule {
     String expandBranch1Match();
 
     String makeRegex();
+
+    void reset();
 }

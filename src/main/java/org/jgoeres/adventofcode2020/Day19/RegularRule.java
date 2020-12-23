@@ -92,6 +92,13 @@ public class RegularRule extends AbstractRule {
         return regex;
     }
 
+    @Override
+    public void reset() {
+        // Clear the branches
+        branch1.clear();
+        branch2.clear();
+    }
+
     public ArrayList<Rule> getBranch1() {
         return branch1;
     }
