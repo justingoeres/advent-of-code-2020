@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,7 +12,7 @@ public class Day19Service {
     private final String DEFAULT_INPUTS_PATH = "data/day19/input.txt";
     private static final String EMPTY = "";
     private static final String SPACE = " ";
-    private static boolean DEBUG = true;
+    public static boolean DEBUG = true;
 
     private ArrayList<String> inputList = new ArrayList<>();
     public HashMap<Integer, Rule> allRules = new HashMap<>();
@@ -26,10 +26,39 @@ public class Day19Service {
     }
 
     public int doPartA() {
-        int result = 0;
-        /** Put problem implementation here **/
+        int count = 0;
+        /**
+         * How many messages completely match rule 0?
+         **/
+        Rule rule0 = allRules.get(0);
+        String rule0Regex = rule0.makeRegex();
+        if (DEBUG) {
+            System.out.println("To match:\t" + rule0Regex);
+        }
 
-        return result;
+        Pattern p = Pattern.compile(rule0Regex);
+//        for (Rule rule : allRules.values()) {
+//            System.out.println("Rule #" + rule.getRuleNum()
+//                    + ":\t" + rule.expandBranch1Match());
+//        }
+        int i = 0;
+        for (String line : inputList) {
+            Matcher m = p.matcher(line);
+            if (m.matches()) count++;
+            if (DEBUG) {
+                System.out.println("input #" + i + "\t" + line + "\t" + m.matches());
+                i++;
+            }
+        }
+        return count;
+    }
+
+    public int countMatches(String s, Rule rule) {
+        int count = 0;
+        // Test s against all the branches of this rule, all the way down
+
+
+        return count;
     }
 
     public int doPartB() {
@@ -62,11 +91,17 @@ public class Day19Service {
                 if (m1.find()) { // If our regex matched this line
                     // Parse it
                     Integer parentRuleNum = Integer.parseInt(m1.group(1));
-                    if (DEBUG) System.out.println(parentRuleNum);
-                    // Create an empty rule at this number
-                    RegularRule newRule = new RegularRule();
-                    // Put the new rule in the set of all rules
-                    allRules.put(parentRuleNum, newRule);
+                    // Create an empty rule at this number, or get one if it exists
+                    RegularRule newRule;
+                    if (allRules.containsKey(parentRuleNum)) {
+                        // If we've seen this rule before, it exists; get it
+                        newRule = (RegularRule) allRules.get(parentRuleNum);
+                    } else {
+                        // We haven't seen this rule before; create it
+                        newRule = new RegularRule();
+                        newRule.setRuleNum(parentRuleNum);
+                        allRules.put(parentRuleNum, newRule);
+                    }
                     String subRules = m1.group(2); // This will always exist
                     for (String subRuleStr : subRules.split(SPACE)) {
                         Integer ruleNum = Integer.parseInt(subRuleStr);
@@ -77,6 +112,7 @@ public class Day19Service {
                         } else {
                             // We haven't seen this rule before; create it
                             subRule = new RegularRule();
+                            subRule.setRuleNum(ruleNum);
                             allRules.put(ruleNum, subRule);
                         }
                         newRule.addBranch1(subRule);
@@ -93,6 +129,7 @@ public class Day19Service {
                             } else {
                                 // We haven't seen this rule before; create it
                                 subRule = new RegularRule();
+                                subRule.setRuleNum(ruleNum);
                                 allRules.put(ruleNum, subRule);
                             }
                             newRule.addBranch2(subRule);
@@ -108,6 +145,7 @@ public class Day19Service {
                     } else {
                         // We haven't seen this rule before; create it
                         baseRule = new BaseRule();
+                        baseRule.setRuleNum(baseRuleNum);
                         allRules.put(baseRuleNum, baseRule);
                     }
                     Character ruleChar = m1a.group(2).charAt(0);
