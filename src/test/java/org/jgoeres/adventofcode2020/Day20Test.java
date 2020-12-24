@@ -35,10 +35,10 @@ public class Day20Test {
     @Test
     public void Day20BExample1() {
         Day20Service day20Service = new Day20Service("data/day20/example1.txt");
-        final long EXPECTED = 20899048083289L;
+        final long EXPECTED = 273;
         long result = 0;
         try {
-            result = day20Service.doPartB();
+            result = day20Service.doPartB(3);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -47,13 +47,14 @@ public class Day20Test {
 
    @Test
    public void Day20B() {
-       final int EXPECTED = 0;
+       final int EXPECTED = 1599;
        int result = 0;
        try {
            result = RunDay20.problem20B();
        } catch (Exception e) {
            System.out.println(e.getMessage());
        }
+       // 1629 too high (matches someone else's)
        Assert.assertEquals(EXPECTED, result);
    }
 }

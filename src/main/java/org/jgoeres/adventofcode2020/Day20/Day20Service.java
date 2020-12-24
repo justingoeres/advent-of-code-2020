@@ -27,9 +27,9 @@ public class Day20Service {
         loadInputs(DEFAULT_INPUTS_PATH);
     }
 
-    int PUZZLE_WIDTH = 3;
-    final int MONSTER_ROW_WIDTH = STRIPPED_LENGTH * PUZZLE_WIDTH;
-    final int MONSTER_AREA_HEIGHT = MONSTER_ROW_WIDTH;
+    int PUZZLE_WIDTH;
+    int MONSTER_ROW_WIDTH;
+    int MONSTER_AREA_HEIGHT;
 
     public Day20Service(String pathToFile) {
         loadInputs(pathToFile);
@@ -60,7 +60,11 @@ public class Day20Service {
         return result;
     }
 
-    public int doPartB() {
+    public int doPartB(int puzzleWidth) {
+        PUZZLE_WIDTH = puzzleWidth;
+        MONSTER_ROW_WIDTH = STRIPPED_LENGTH * PUZZLE_WIDTH;
+        MONSTER_AREA_HEIGHT = MONSTER_ROW_WIDTH;
+
         int result = 0;
         /**
          * Now, you're ready to check the image for sea monsters.
@@ -98,9 +102,9 @@ public class Day20Service {
             }
         }
 
-        // TODO: This is only for testing the example
-        upperLeft = tileMap.get(1951);
-        upperLeft.flipTile(TOPBOTTOM);
+//        // TODO: This is only for testing the example
+//        upperLeft = tileMap.get(1951);
+//        upperLeft.flipTile(TOPBOTTOM);
 
         upperLeft.printTile();
         System.out.println("\n^^^ Flip TOP-BOTTOM vvv\n");
@@ -196,6 +200,15 @@ public class Day20Service {
                 }
             }
         }
+
+        // Get the initial count of #s
+        int initialCount = 0;
+        for (BigInteger row : monsterArea) {
+            int rowCount = row.bitCount();
+            initialCount += rowCount;
+        }
+        System.out.println("INITIAL COUNT:\t" + initialCount);
+
         // OK, we've got the entire field in a 1D array of BigInts
         // Look for the monster!
         // Try every rotation. If it matches, bail out.
@@ -203,23 +216,32 @@ public class Day20Service {
         all:
         while (true) {
             for (int i = 0; i < 4; i++) {
-                if (DEBUG) printMonsterArea(monsterArea);
+                if (DEBUG) {
+                    System.out.println("\nORIENTATION #" + i);
+                    printMonsterArea(monsterArea);
+                }
                 if (searchMonster(monsterArea)) break all;
                 else monsterArea = rotateArea(monsterArea);     // rotate the entire monsterArea and continue
             }
             // No match yet, flip it
-//            monsterArea = rotateArea(monsterArea);
+            System.out.println("\nFLIP!");
             flipArea(monsterArea);  // flip happens in place
             // And try again
             for (int i = 0; i < 4; i++) {
-                if (DEBUG) printMonsterArea(monsterArea);
+                if (DEBUG) {
+                    System.out.println("\nORIENTATION #" + i);
+                    printMonsterArea(monsterArea);
+                }
                 if (searchMonster(monsterArea)) break all;
                 else monsterArea = rotateArea(monsterArea);     // rotate the entire monsterArea and continue
             }
             break;
         }
+        if (DEBUG) {
+            System.out.println("\n**** FINAL MAP ****");
+            printMonsterArea(monsterArea);
+        }
         // At some point we find at least one monster and end up here
-
         // Count up the remaining 1 bits!
         int count = 0;
         for (BigInteger row : monsterArea) {
@@ -310,7 +332,7 @@ public class Day20Service {
                     // no monster here, shift and continue.
                     shiftMonster = shiftMonster.shiftLeft(1);
                 } else {
-                    // We found a monster!
+                    // We found one part of a potential monster!
                     // Check the rows above and below this one, at the current offset
                     BigInteger monsterRow0 = monsterArea.get(j - 1);
                     BigInteger monsterMask0 = monster0.shiftLeft(offset);
@@ -319,6 +341,9 @@ public class Day20Service {
                     BigInteger monsterMask2 = monster2.shiftLeft(offset);
                     boolean monsterExists2 = monsterRow2.and(monsterMask2).compareTo(monsterMask2) == 0;
                     if (monsterExists0 && monsterExists2) {
+                        if (DEBUG) {
+                            System.out.println("** Monster found at row: " + j + "\toffset: " + offset);
+                        }
                         // If all three parts of the monster match here
                         // Mask out those bits by ANDing with the NOT of the mask
                         BigInteger maskedMonster0 = monsterRow0.and(monsterMask0.not());
@@ -344,6 +369,7 @@ public class Day20Service {
     private void printMonsterArea(ArrayList<BigInteger> monsterArea) {
         System.out.println(); //blank line
         for (int i = 0; i < MONSTER_AREA_HEIGHT; i++) {
+            System.out.print(i + "\t");
             printMonsterRow(monsterArea.get(i));
         }
     }

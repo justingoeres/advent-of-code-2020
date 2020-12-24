@@ -1,4 +1,5 @@
 package org.jgoeres.adventofcode2020.Day20;
+
 public abstract class RunDay20 {
     static String pathToInputs = "data/day20/input.txt";
 
@@ -17,13 +18,12 @@ public abstract class RunDay20 {
     public static int problem20B() {
         System.out.println("=== DAY 20B ===");
 
-        int result = day20Service.doPartB();
+        int result = day20Service.doPartB(12);
 
         System.out.println("Day 20B: Answer = " + result);
 
         return result;
     }
-
 
 
 }
