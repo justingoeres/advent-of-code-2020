@@ -1,16 +1,21 @@
 package org.jgoeres.adventofcode2020.Day20;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
+import org.jgoeres.adventofcode2020.common.Direction8Way;
+import org.jgoeres.adventofcode2020.common.XYPoint;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static org.jgoeres.adventofcode2020.Day20.Day20Service.DEBUG;
 import static org.jgoeres.adventofcode2020.Day20.Tile.FlipDirection.TOPBOTTOM;
+import static org.jgoeres.adventofcode2020.common.Direction8Way.DOWN;
+import static org.jgoeres.adventofcode2020.common.Direction8Way.UP;
 
 public class Tile {
-    private static final int LINE_LENGTH = 10;
-    private static final char ONE = '#';
-    private static final char ZERO = '.';
+    public static final int LINE_LENGTH = 10;
+    public static final int STRIPPED_LENGTH = LINE_LENGTH - 2;
+    public static final char ONE_CHAR = '#';
+    public static final char ZERO_CHAR = '.';
 
     static final int TOP = 0;
     static final int RIGHT = 1;
@@ -19,6 +24,8 @@ public class Tile {
     private static final int CW = 1;
 
     boolean locked = false;
+    XYPoint location = null;
+    static HashMap<String, Tile> layout = new HashMap<>();
 
     enum FlipDirection {
         TOPBOTTOM,
@@ -30,7 +37,7 @@ public class Tile {
     private ArrayList<Tile> matchedTiles = new ArrayList<>();
 
     private int id;
-    private char[][] tileData = new char[LINE_LENGTH][LINE_LENGTH];
+    char[][] tileData = new char[LINE_LENGTH][LINE_LENGTH];
 
     private int row = 0;
 
@@ -53,34 +60,43 @@ public class Tile {
         // Go around the tile clockwise, starting on top
         // Top edge
         char[] topEdge = tileData[0];
-        int topEdgeId = calculateEdgeId(topEdge);
+        int topEdgeId = calculateRowId(topEdge);
         edgeIds.add(topEdgeId);
 
         // Right edge
         char[] rightEdge = getColumn(tileData, LINE_LENGTH - 1);
-        int rightEdgeId = calculateEdgeId(rightEdge);
+        int rightEdgeId = calculateRowId(rightEdge);
         edgeIds.add(rightEdgeId);
 
         // Let's try NOT flipping the bottom & left edges so we don't have to re-/un-flip them to do matching
         // Bottom edge
         char[] bottomEdge = tileData[LINE_LENGTH - 1];
 //        int bottomEdgeId = flip(calculateEdgeId(bottomEdge));  // This will be reversed compared to the top edge
-        int bottomEdgeId = calculateEdgeId(bottomEdge);
+        int bottomEdgeId = calculateRowId(bottomEdge);
         edgeIds.add(bottomEdgeId);
 
 
         // Left edge
         char[] leftEdge = getColumn(tileData, 0);
 //        int leftEdgeId = flip(calculateEdgeId(leftEdge));  // This will be reversed compared to the right edge
-        int leftEdgeId = calculateEdgeId(leftEdge);
+        int leftEdgeId = calculateRowId(leftEdge);
         edgeIds.add(leftEdgeId);
     }
 
-    public void orientNeighbors() {
+    public void orientNeighbors(boolean recurse) {
         // Orient all of this tile's neighbors to match it. Then lock them.
+
+        if (DEBUG) {
+            System.out.println("=== Orienting neighbors of ===");
+            printTile();
+        }
+
         for (Tile neighbor : matchedTiles) {
             // If this neighbor is already locked, skip it
-            if(neighbor.isLocked()) continue;
+            if (neighbor.isLocked()) {
+                if (DEBUG) System.out.println("\tLocked:\tTile #" + neighbor.getId());
+                continue;   // << THIS STOPS THE RECURSION
+            }
             // else figure out how to orient it to us
             // Which side does it match us on?
             int side;
@@ -88,7 +104,7 @@ public class Tile {
             for (side = TOP; side <= LEFT; side++) {
                 int ourEdgeId = edgeIds.get(side);
                 if (neighbor.getEdgeIds().contains(ourEdgeId)
-                || neighbor.getEdgeIds().contains(flip(ourEdgeId))) {
+                        || neighbor.getEdgeIds().contains(flip(ourEdgeId))) {
                     // If the neighbor matches our edgeId or a FLIP of it,
                     // We need to rotate & flip it until it matches us on the side OPPOSITE ours
                     int neighborSide = (side + 2) % 4; // BOTTOM -> TOP; LEFT -> RIGHT; etc.
@@ -108,9 +124,37 @@ public class Tile {
                 // else this neighbor doesn't match this side; check the next side
             }
             // Once the neighbor is rotated, lock it in place
+            if (DEBUG) {
+                System.out.println("** " + getId() + " Side:\t" + side);
+                neighbor.printTile();
+            }
+            XYPoint neighborXY = null;
+            switch (side) {
+                case TOP:
+                    neighborXY = this.location.getRelativeLocation(UP);
+                    break;
+                case RIGHT:
+                    neighborXY = this.location.getRelativeLocation(Direction8Way.RIGHT);
+                    break;
+                case BOTTOM:
+                    neighborXY = this.location.getRelativeLocation(DOWN);
+                    break;
+                case LEFT:
+                    neighborXY = this.location.getRelativeLocation(Direction8Way.LEFT);
+                    break;
+            }
+            neighbor.setLocation(neighborXY);
             neighbor.setLocked(true);
-            // neighbor is oriented, so go to the next one
+            // neighbor is oriented, so either go to the next one or recurse onward
+            if (recurse) neighbor.orientNeighbors(recurse);
         }
+    }
+
+    public void orientAllPieces() {
+        // Starting from THIS tile, recursively orient all other tiles
+        // Orient our immediate neighbors
+        this.orientNeighbors(true);
+        // Now that they're in the correct orientation
 
     }
 
@@ -144,13 +188,6 @@ public class Tile {
         char[] temp;
         switch (direction) {
             case TOPBOTTOM:
-                // Flipping top to bottom means:
-                // top & bottom switch places (but do not flip)
-//                switchEdge(TOP);
-//                // right & left both flip (but do not switch places)
-//                flipEdge(RIGHT);
-//                flipEdge(LEFT);
-
                 // Flip the tileData top to bottom
                 for (int i = 0; i < LINE_LENGTH / 2; i++) {
                     temp = tileData[i];
@@ -158,15 +195,7 @@ public class Tile {
                     tileData[LINE_LENGTH - 1 - i] = temp;
                 }
                 break;
-
             case LEFTRIGHT:
-                // Flipping left to right means:
-//                // top & bottom both flip (but do not switch places)
-//                flipEdge(TOP);
-//                flipEdge(BOTTOM);
-                // right & left switch places (but do not flip)
-//                switchEdge(RIGHT);
-
                 // Flip the tileData left to right
                 for (int i = 0; i < LINE_LENGTH / 2; i++) {
                     temp = getColumn(tileData, i);
@@ -198,12 +227,12 @@ public class Tile {
         }
     }
 
-    private int calculateEdgeId(char[] edgeArray) {
+    public int calculateRowId(char[] edgeArray) {
         int edgeId = 0;
         for (Character c : edgeArray) {
             // Process each character in the line
             edgeId <<= 1;   // shift it left
-            if (c.equals(ONE)) {
+            if (c.equals(ONE_CHAR)) {
                 // If this is a '1' in our edge fingerprint/id
                 edgeId |= 1; // Put a one in the leftmost bit
             }
@@ -267,6 +296,18 @@ public class Tile {
         }
     }
 
+    public void stripEdges() {
+        // Remove the top & bottom rows, and the left & right column of this tile
+        char[][] stripped = new char[STRIPPED_LENGTH][STRIPPED_LENGTH];
+        for (int i = 0; i < STRIPPED_LENGTH; i++) {
+            for (int j = 0; j < STRIPPED_LENGTH; j++) {
+                stripped[i][j] = tileData[i + 1][j + 1];
+            }
+        }
+        // Replace the tileData with the stripped data
+        tileData = stripped;
+    }
+
     // Function for print matrix
     public void printTile() {
         System.out.println("Tile " + id + ":");
@@ -275,6 +316,7 @@ public class Tile {
                 System.out.print(tileData[i][j]);
             System.out.println();
         }
+        System.out.println(); // blank line after
     }
 
 
@@ -301,5 +343,38 @@ public class Tile {
 
     public void setLocked(boolean locked) {
         this.locked = locked;
+    }
+
+    public void setLocation(XYPoint loc) {
+        location = loc;
+        layout.put(loc.toString(), this);
+    }
+
+    static void printLayout(int lineLength) {
+        int PUZZLE_WIDTH = 3; // Change this somehow for puzzle
+        XYPoint xy = new XYPoint(0, 0);
+
+        for (int tileRow = 0; tileRow < PUZZLE_WIDTH; tileRow++) {
+            xy.setY(tileRow);
+            for (int row = 0; row < lineLength; row++) {
+                xy.setX(0);
+                for (int i = 0; i < PUZZLE_WIDTH; i++) {
+                    // Print each row of each tile in this tilerow
+                    Tile tile = layout.get(xy.toString());
+                    char[] tileRowData = tile.tileData[row];
+                    // Print all the data for this row of this tile
+                    for (int j = 0; j < lineLength; j++)
+                        System.out.print(tileRowData[j]);
+                    System.out.print(" "); // space between tiles
+                    xy = xy.getRelativeLocation(Direction8Way.RIGHT);
+                }
+                System.out.println();
+            }
+            System.out.println();
+        }
+
+
+        xy = xy.getRelativeLocation(Direction8Way.RIGHT);
+
     }
 }
