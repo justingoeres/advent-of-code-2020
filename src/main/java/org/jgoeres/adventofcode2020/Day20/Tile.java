@@ -1,19 +1,24 @@
 package org.jgoeres.adventofcode2020.Day20;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+
+import static org.jgoeres.adventofcode2020.Day20.Tile.FlipDirection.TOPBOTTOM;
 
 public class Tile {
     private static final int LINE_LENGTH = 10;
     private static final char ONE = '#';
     private static final char ZERO = '.';
 
-    private static final int TOP = 0;
-    private static final int RIGHT = 1;
-    private static final int BOTTOM = 2;
-    private static final int LEFT = 3;
+    static final int TOP = 0;
+    static final int RIGHT = 1;
+    static final int BOTTOM = 2;
+    static final int LEFT = 3;
     private static final int CW = 1;
+
+    boolean locked = false;
 
     enum FlipDirection {
         TOPBOTTOM,
@@ -21,7 +26,8 @@ public class Tile {
     }
 
     private ArrayList<Integer> edgeIds = new ArrayList<>();
-    private HashSet<Tile> matchedTiles = new HashSet<>();
+    //    private HashSet<Tile> matchedTiles = new HashSet<>();
+    private ArrayList<Tile> matchedTiles = new ArrayList<>();
 
     private int id;
     private char[][] tileData = new char[LINE_LENGTH][LINE_LENGTH];
@@ -43,6 +49,7 @@ public class Tile {
     }
 
     public void calculateEdges() {
+        edgeIds.clear();
         // Go around the tile clockwise, starting on top
         // Top edge
         char[] topEdge = tileData[0];
@@ -69,6 +76,44 @@ public class Tile {
         edgeIds.add(leftEdgeId);
     }
 
+    public void orientNeighbors() {
+        // Orient all of this tile's neighbors to match it. Then lock them.
+        for (Tile neighbor : matchedTiles) {
+            // If this neighbor is already locked, skip it
+            if(neighbor.isLocked()) continue;
+            // else figure out how to orient it to us
+            // Which side does it match us on?
+            int side;
+            side:
+            for (side = TOP; side <= LEFT; side++) {
+                int ourEdgeId = edgeIds.get(side);
+                if (neighbor.getEdgeIds().contains(ourEdgeId)
+                || neighbor.getEdgeIds().contains(flip(ourEdgeId))) {
+                    // If the neighbor matches our edgeId or a FLIP of it,
+                    // We need to rotate & flip it until it matches us on the side OPPOSITE ours
+                    int neighborSide = (side + 2) % 4; // BOTTOM -> TOP; LEFT -> RIGHT; etc.
+                    // Try every rotation. If it matches, bail out.
+                    for (int i = 0; i < 4; i++) {
+                        if (ourEdgeId == neighbor.getEdgeId(neighborSide)) break side;
+                        neighbor.rotateCW();
+                    }
+                    // No match yet, flip it
+                    neighbor.flipTile(TOPBOTTOM);
+                    // And try again
+                    for (int i = 0; i < 4; i++) {
+                        if (ourEdgeId == neighbor.getEdgeId(neighborSide)) break side;
+                        neighbor.rotateCW();
+                    }
+                }
+                // else this neighbor doesn't match this side; check the next side
+            }
+            // Once the neighbor is rotated, lock it in place
+            neighbor.setLocked(true);
+            // neighbor is oriented, so go to the next one
+        }
+
+    }
+
     public void rotateCW() {
         // Rotate the tileData matrix 90 degree clockwise
         // Ref: https://www.geeksforgeeks.org/rotate-a-matrix-by-90-degree-in-clockwise-direction-without-using-any-extra-space/
@@ -87,32 +132,50 @@ public class Tile {
         }
 
         // rotate the edgeIds to the right by one
-        Collections.rotate(edgeIds, CW);
+//        Collections.rotate(edgeIds, CW);
         // When right (1) goes to bottom (2), it gets flipped
 //        flipEdge(BOTTOM);
         // When left (3) goes to top (0), it gets flipped
 //        flipEdge(TOP);
+        calculateEdges();
     }
 
     public void flipTile(FlipDirection direction) {
+        char[] temp;
         switch (direction) {
             case TOPBOTTOM:
                 // Flipping top to bottom means:
                 // top & bottom switch places (but do not flip)
-                switchEdge(TOP);
-                // right & left both flip (but do not switch places)
-                flipEdge(RIGHT);
-                flipEdge(LEFT);
+//                switchEdge(TOP);
+//                // right & left both flip (but do not switch places)
+//                flipEdge(RIGHT);
+//                flipEdge(LEFT);
+
+                // Flip the tileData top to bottom
+                for (int i = 0; i < LINE_LENGTH / 2; i++) {
+                    temp = tileData[i];
+                    tileData[i] = tileData[LINE_LENGTH - 1 - i];
+                    tileData[LINE_LENGTH - 1 - i] = temp;
+                }
                 break;
+
             case LEFTRIGHT:
                 // Flipping left to right means:
-                // top & bottom both flip (but do not switch places)
-                flipEdge(TOP);
-                flipEdge(BOTTOM);
+//                // top & bottom both flip (but do not switch places)
+//                flipEdge(TOP);
+//                flipEdge(BOTTOM);
                 // right & left switch places (but do not flip)
-                switchEdge(RIGHT);
+//                switchEdge(RIGHT);
+
+                // Flip the tileData left to right
+                for (int i = 0; i < LINE_LENGTH / 2; i++) {
+                    temp = getColumn(tileData, i);
+                    setColumn(tileData, i, getColumn(tileData, LINE_LENGTH - 1 - i));
+                    setColumn(tileData, LINE_LENGTH - 1 - i, temp);
+                }
                 break;
         }
+        calculateEdges();
     }
 
     private void flipEdge(int edge) {
@@ -198,6 +261,12 @@ public class Tile {
         return column;
     }
 
+    private void setColumn(char[][] matrix, int index, char[] column) {
+        for (int i = 0; i < LINE_LENGTH; i++) {
+            matrix[i][index] = column[i];
+        }
+    }
+
     // Function for print matrix
     public void printTile() {
         System.out.println("Tile " + id + ":");
@@ -217,7 +286,20 @@ public class Tile {
         return edgeIds;
     }
 
-    public HashSet<Tile> getMatchedTiles() {
+    public int getEdgeId(Integer side) {
+        return edgeIds.get(side);
+    }
+
+
+    public ArrayList<Tile> getMatchedTiles() {
         return matchedTiles;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 }

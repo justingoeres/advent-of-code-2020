@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.jgoeres.adventofcode2020.Day20.Tile.*;
+import static org.jgoeres.adventofcode2020.Day20.Tile.FlipDirection.LEFTRIGHT;
+import static org.jgoeres.adventofcode2020.Day20.Tile.FlipDirection.TOPBOTTOM;
+
 public class Day20Service {
     private final String DEFAULT_INPUTS_PATH = "data/day20/input.txt";
 
@@ -77,20 +81,78 @@ public class Day20Service {
         // Can we figure that out by working from one of the known corners?
 
         // Start with one of the corner tiles (i.e. two matching edges)
-        // Don't worry about flipping it now, but ROTATE it until it's the "upper right"
+        // Don't worry about flipping it now, but ROTATE it until it's the "upper left"
         // i.e. only its RIGHT (1) and BOTTOM (2) edges match anything.
-        Tile upperRight = null;
+        Tile upperLeft = null;
         for (Tile tile : tileMap.values()) {
             if (tile.getMatchedTiles().size() == 2) {
-                upperRight = tile;
+                upperLeft = tile;
                 break;
             }
         }
+
+
+        upperLeft.printTile();
+        System.out.println("\n^^^ Flip TOP-BOTTOM vvv\n");
+        upperLeft.flipTile(TOPBOTTOM);
+        upperLeft.printTile();
+        System.out.println("\n<<< Flip LEFT-RIGHT >>>\n");
+        upperLeft.flipTile(LEFTRIGHT);
+        upperLeft.printTile();
+
         // We found our upper right tile, now rotate it to the orientation we want
-        upperRight.printTile();
-        upperRight.rotateCW();
-        System.out.println();
-        upperRight.printTile();
+        // Check the matches of this corner tile to see if they match on the RIGHT and BOTTOM.
+        // Rotate the tile until they do
+        // Find which side the first matchedTile matches up to, starting with the RIGHT side
+        Tile firstMatch = upperLeft.getMatchedTiles().get(0);
+        int side1;
+        all:
+        for (side1 = TOP; side1 <= LEFT; side1++) {
+            if (firstMatch.getEdgeIds().contains(upperLeft.getEdgeId(side1))
+                    || firstMatch.getEdgeIds().contains(flip(upperLeft.getEdgeId(side1)))) {
+                // When we find the first matching side, rotate or flip upperLeft so the match is on the RIGHT
+                switch (side1) {
+                    case TOP:
+                        // If TOP matches, rotate ONCE
+                        upperLeft.rotateCW();
+                        break;
+                    case RIGHT:
+                        // If RIGHT matches, then we're halfway there; just bail
+                        break;
+                    case BOTTOM:
+                        // If BOTTOM matches first, then rotate THRICE
+                        upperLeft.rotateCW();
+                        upperLeft.rotateCW();
+                        upperLeft.rotateCW();
+                        break;
+                    case LEFT:
+                        // if LEFT matches first, then rotate twice
+                        upperLeft.rotateCW();
+                        upperLeft.rotateCW();
+                        break;
+                }
+                // Now we've got the RIGHT side where we want it.
+                // We need to see if the BOTTOM side also matches, and rotate once if it doesn't
+                Tile secondMatch = upperLeft.getMatchedTiles().get(1);
+                if (secondMatch.getEdgeIds().contains(upperLeft.getEdgeId(TOP)))
+                    // RIGHT & TOP match, so rotate ONCE
+                    upperLeft.rotateCW();
+                // Otherwise RIGHT & BOTTOM match already so everything is perfect. Nothing futher to do.
+            }
+        }
+
+        // Now we have our upper left tile oriented correctly.
+        // So we can proceed to orient all the other tiles
+        upperLeft.setLocked(true);
+
+        // Orient all neighbors of the upperLeft tile
+        upperLeft.orientNeighbors();
+        for (Tile matchTile : upperLeft.getMatchedTiles()) {
+            // For each matched tile
+            // Which side does it match on?
+//            boolean m
+        }
+
 
         return result;
     }
