@@ -17,7 +17,7 @@ import static org.jgoeres.adventofcode2020.Day20.Tile.FlipDirection.TOPBOTTOM;
 public class Day20Service {
     private final String DEFAULT_INPUTS_PATH = "data/day20/input.txt";
 
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     private static String EMPTY = "";
 
     private ArrayList<Integer> inputList = new ArrayList<>();
@@ -102,17 +102,15 @@ public class Day20Service {
             }
         }
 
-//        // TODO: This is only for testing the example
-//        upperLeft = tileMap.get(1951);
-//        upperLeft.flipTile(TOPBOTTOM);
-
-        upperLeft.printTile();
-        System.out.println("\n^^^ Flip TOP-BOTTOM vvv\n");
-        upperLeft.flipTile(TOPBOTTOM);
-        upperLeft.printTile();
-        System.out.println("\n<<< Flip LEFT-RIGHT >>>\n");
-        upperLeft.flipTile(LEFTRIGHT);
-        upperLeft.printTile();
+        if (DEBUG) {
+            upperLeft.printTile();
+            System.out.println("\n^^^ Flip TOP-BOTTOM vvv\n");
+            upperLeft.flipTile(TOPBOTTOM);
+            upperLeft.printTile();
+            System.out.println("\n<<< Flip LEFT-RIGHT >>>\n");
+            upperLeft.flipTile(LEFTRIGHT);
+            upperLeft.printTile();
+        }
 
         // We found our upper right tile, now rotate it to the orientation we want
         // Check the matches of this corner tile to see if they match on the RIGHT and BOTTOM.
@@ -207,7 +205,6 @@ public class Day20Service {
             int rowCount = row.bitCount();
             initialCount += rowCount;
         }
-        System.out.println("INITIAL COUNT:\t" + initialCount);
 
         // OK, we've got the entire field in a 1D array of BigInts
         // Look for the monster!
@@ -330,7 +327,6 @@ public class Day20Service {
                 boolean monsterExists1 = monsterRow.and(shiftMonster).compareTo(shiftMonster) == 0;
                 if (!monsterExists1) {
                     // no monster here, shift and continue.
-                    shiftMonster = shiftMonster.shiftLeft(1);
                 } else {
                     // We found one part of a potential monster!
                     // Check the rows above and below this one, at the current offset
@@ -359,6 +355,9 @@ public class Day20Service {
                     }
                     // but don't break – there might be more monsters in this row!
                 }
+                // shift and continue
+                shiftMonster = shiftMonster.shiftLeft(1);
+
             }
 
         }

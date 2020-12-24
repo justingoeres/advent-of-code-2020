@@ -10,7 +10,7 @@ public abstract class RunDay20 {
 
         long result = day20Service.doPartA();
 
-        System.out.println("Day 20A: Answer = " + result);
+        System.out.println("Day 20A: Product of all corner tiles = " + result);
 
         return result;
     }
@@ -20,7 +20,7 @@ public abstract class RunDay20 {
 
         int result = day20Service.doPartB(12);
 
-        System.out.println("Day 20B: Answer = " + result);
+        System.out.println("Day 20B: Water roughness = " + result);
 
         return result;
     }
