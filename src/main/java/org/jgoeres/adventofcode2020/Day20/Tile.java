@@ -1,5 +1,7 @@
 package org.jgoeres.adventofcode2020.Day20;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 public class Tile {
@@ -8,9 +10,17 @@ public class Tile {
     private static final char ZERO = '.';
 
     private static final int TOP = 0;
-    private static final int BOTTOM = 9;
+    private static final int RIGHT = 1;
+    private static final int BOTTOM = 2;
+    private static final int LEFT = 3;
+    private static final int CW = 1;
 
-    private HashSet<Integer> edgeIds = new HashSet<>();
+    enum FlipDirection {
+        TOPBOTTOM,
+        LEFTRIGHT
+    }
+
+    private ArrayList<Integer> edgeIds = new ArrayList<>();
     private HashSet<Tile> matchedTiles = new HashSet<>();
 
     private int id;
@@ -33,24 +43,96 @@ public class Tile {
     }
 
     public void calculateEdges() {
+        // Go around the tile clockwise, starting on top
         // Top edge
         char[] topEdge = tileData[0];
         int topEdgeId = calculateEdgeId(topEdge);
         edgeIds.add(topEdgeId);
-        // Bottom edge
-        char[] bottomEdge = tileData[LINE_LENGTH - 1];
-        int bottomEdgeId = calculateEdgeId(bottomEdge);  // This will be reversed compared top edge
-        edgeIds.add(bottomEdgeId);
 
         // Right edge
         char[] rightEdge = getColumn(tileData, LINE_LENGTH - 1);
-        int rightEdgeId = calculateEdgeId(rightEdge);  // This will be reversed compared top edge
+        int rightEdgeId = calculateEdgeId(rightEdge);
         edgeIds.add(rightEdgeId);
+
+        // Let's try NOT flipping the bottom & left edges so we don't have to re-/un-flip them to do matching
+        // Bottom edge
+        char[] bottomEdge = tileData[LINE_LENGTH - 1];
+//        int bottomEdgeId = flip(calculateEdgeId(bottomEdge));  // This will be reversed compared to the top edge
+        int bottomEdgeId = calculateEdgeId(bottomEdge);
+        edgeIds.add(bottomEdgeId);
+
+
         // Left edge
         char[] leftEdge = getColumn(tileData, 0);
-        int leftEdgeId = calculateEdgeId(leftEdge);  // This will be reversed compared top edge
+//        int leftEdgeId = flip(calculateEdgeId(leftEdge));  // This will be reversed compared to the right edge
+        int leftEdgeId = calculateEdgeId(leftEdge);
         edgeIds.add(leftEdgeId);
-        flip(leftEdgeId);
+    }
+
+    public void rotateCW() {
+        // Rotate the tileData matrix 90 degree clockwise
+        // Ref: https://www.geeksforgeeks.org/rotate-a-matrix-by-90-degree-in-clockwise-direction-without-using-any-extra-space/
+        // Traverse each cycle
+        for (int i = 0; i < LINE_LENGTH / 2; i++) {
+            for (int j = i; j < LINE_LENGTH - i - 1; j++) {
+
+                // Swap elements of each cycle
+                // in clockwise direction
+                char temp = tileData[i][j];
+                tileData[i][j] = tileData[LINE_LENGTH - 1 - j][i];
+                tileData[LINE_LENGTH - 1 - j][i] = tileData[LINE_LENGTH - 1 - i][LINE_LENGTH - 1 - j];
+                tileData[LINE_LENGTH - 1 - i][LINE_LENGTH - 1 - j] = tileData[j][LINE_LENGTH - 1 - i];
+                tileData[j][LINE_LENGTH - 1 - i] = temp;
+            }
+        }
+
+        // rotate the edgeIds to the right by one
+        Collections.rotate(edgeIds, CW);
+        // When right (1) goes to bottom (2), it gets flipped
+//        flipEdge(BOTTOM);
+        // When left (3) goes to top (0), it gets flipped
+//        flipEdge(TOP);
+    }
+
+    public void flipTile(FlipDirection direction) {
+        switch (direction) {
+            case TOPBOTTOM:
+                // Flipping top to bottom means:
+                // top & bottom switch places (but do not flip)
+                switchEdge(TOP);
+                // right & left both flip (but do not switch places)
+                flipEdge(RIGHT);
+                flipEdge(LEFT);
+                break;
+            case LEFTRIGHT:
+                // Flipping left to right means:
+                // top & bottom both flip (but do not switch places)
+                flipEdge(TOP);
+                flipEdge(BOTTOM);
+                // right & left switch places (but do not flip)
+                switchEdge(RIGHT);
+                break;
+        }
+    }
+
+    private void flipEdge(int edge) {
+        edgeIds.set(edge, flip(edgeIds.get(edge)));
+    }
+
+    private void switchEdge(int edge) {
+        int temp;
+        switch (edge) {
+            case TOP:
+            case BOTTOM:
+                temp = edgeIds.get(TOP);
+                edgeIds.set(TOP, edgeIds.get(BOTTOM));
+                edgeIds.set(BOTTOM, temp);
+            case RIGHT:
+            case LEFT:
+                temp = edgeIds.get(RIGHT);
+                edgeIds.set(RIGHT, edgeIds.get(LEFT));
+                edgeIds.set(LEFT, temp);
+        }
     }
 
     private int calculateEdgeId(char[] edgeArray) {
@@ -116,11 +198,22 @@ public class Tile {
         return column;
     }
 
+    // Function for print matrix
+    public void printTile() {
+        System.out.println("Tile " + id + ":");
+        for (int i = 0; i < LINE_LENGTH; i++) {
+            for (int j = 0; j < LINE_LENGTH; j++)
+                System.out.print(tileData[i][j]);
+            System.out.println();
+        }
+    }
+
+
     public int getId() {
         return id;
     }
 
-    public HashSet<Integer> getEdgeIds() {
+    public ArrayList<Integer> getEdgeIds() {
         return edgeIds;
     }
 

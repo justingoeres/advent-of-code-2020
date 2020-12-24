@@ -32,6 +32,19 @@ public class Day20Test {
        Assert.assertEquals(EXPECTED, result);
    }
 
+    @Test
+    public void Day20BExample1() {
+        Day20Service day20Service = new Day20Service("data/day20/example1.txt");
+        final long EXPECTED = 20899048083289L;
+        long result = 0;
+        try {
+            result = day20Service.doPartB();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(EXPECTED, result);
+    }
+
    @Test
    public void Day20B() {
        final int EXPECTED = 0;

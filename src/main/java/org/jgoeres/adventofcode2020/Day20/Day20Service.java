@@ -51,7 +51,46 @@ public class Day20Service {
 
     public int doPartB() {
         int result = 0;
-        /** Put problem implementation here **/
+        /**
+         * Now, you're ready to check the image for sea monsters.
+         * The borders of each tile are not part of the actual image; start by removing them.
+         *a sea monster will look like this:
+         *
+         *                   #
+         * #    ##    ##    ###
+         *  #  #  #  #  #  #
+         *
+         * How many # are not part of a sea monster?
+         */
+
+
+        // Make sure all the tiles are matched up
+        for (Tile tile1 : tileMap.values()) {
+            for (Tile tile2 : tileMap.values()) {
+                // Process all the possible matches
+                tile1.matchesTile(tile2);
+            }
+        }
+
+        // After Part A, we have all the tiles and their corresponding matching tiles.
+        // But we don't know anything about rotation or flipping.
+        // Can we figure that out by working from one of the known corners?
+
+        // Start with one of the corner tiles (i.e. two matching edges)
+        // Don't worry about flipping it now, but ROTATE it until it's the "upper right"
+        // i.e. only its RIGHT (1) and BOTTOM (2) edges match anything.
+        Tile upperRight = null;
+        for (Tile tile : tileMap.values()) {
+            if (tile.getMatchedTiles().size() == 2) {
+                upperRight = tile;
+                break;
+            }
+        }
+        // We found our upper right tile, now rotate it to the orientation we want
+        upperRight.printTile();
+        upperRight.rotateCW();
+        System.out.println();
+        upperRight.printTile();
 
         return result;
     }
