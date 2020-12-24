@@ -4,10 +4,10 @@ public abstract class RunDay20 {
 
     static Day20Service day20Service = new Day20Service();
 
-    public static int problem20A() {
+    public static long problem20A() {
         System.out.println("=== DAY 20A ===");
 
-        int result = day20Service.doPartA();
+        long result = day20Service.doPartA();
 
         System.out.println("Day 20A: Answer = " + result);
 
