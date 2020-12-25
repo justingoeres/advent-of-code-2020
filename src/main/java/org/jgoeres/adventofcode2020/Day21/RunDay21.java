@@ -19,7 +19,7 @@ public abstract class RunDay21 {
 
         String result = day21Service.doPartB();
 
-        System.out.println("Day 21B: Answer = " + result);
+        System.out.println("Day 21B: Canonical dangerous ingredient list = " + result);
 
         return result;
     }

@@ -11,9 +11,7 @@ public class Day21Service {
 
     private static boolean DEBUG = false;
 
-    private ArrayList<Integer> inputList = new ArrayList<>();
     private HashMap<String, HashSet<String>> allergensToIngredientsMap = new HashMap<>();
-    private HashMap<String, HashSet<String>> ingredientsMayContain = new HashMap<>();
     private HashMap<Integer, Food> foods = new HashMap<>();
     private HashSet<String> allIngredients = new HashSet<>();
 
@@ -116,7 +114,6 @@ public class Day21Service {
 
     // load inputs line-by-line and apply a regex to extract fields
     private void loadInputs(String pathToFile) {
-        inputList.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;
             Integer nextInt = 0;
@@ -147,16 +144,6 @@ public class Day21Service {
                 for (String ingredient : ingredients) {
                     HashSet<String> mayContain;
                     allIngredients.add(ingredient);
-                    if (ingredientsMayContain.containsKey(ingredient)) {
-                        // If we've seen this ingredient before
-                        mayContain = ingredientsMayContain.get(ingredient);
-                    } else {
-                        // New ingredient, make a new (empty) allergen set
-                        mayContain = new HashSet<>();
-                        ingredientsMayContain.put(ingredient, mayContain);
-                    }
-                    // Add all the allergens to this ingredient's set
-                    mayContain.addAll(allergens);
                 }
                 // Also build up our collection of allergens and which ingredients MAY contain them
                 for (String allergen : allergens) {
