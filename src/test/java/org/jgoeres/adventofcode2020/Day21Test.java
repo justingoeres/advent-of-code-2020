@@ -6,18 +6,18 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class Day21Test {
-    @Test
-    public void Day21AExample1() {
-        Day21Service day21Service = new Day21Service("data/day21/example1.txt");
-        final long EXPECTED = 5L;
-        long result = 0;
-        try {
-            result = day21Service.doPartA();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        Assert.assertEquals(EXPECTED, result);
-    }
+//    @Test
+//    public void Day21AExample1() {
+//        Day21Service day21Service = new Day21Service("data/day21/example1.txt");
+//        final long EXPECTED = 5L;
+//        long result = 0;
+//        try {
+//            result = day21Service.doPartA();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//        Assert.assertEquals(EXPECTED, result);
+//    }
     
    @Test
    public void Day21A() {
@@ -31,10 +31,23 @@ public class Day21Test {
        Assert.assertEquals(EXPECTED, result);
    }
 
+//    @Test
+//    public void Day21BExample1() {
+//        Day21Service day21Service = new Day21Service("data/day21/example1.txt");
+//        final String EXPECTED = "mxmxvkd,sqjhc,fvjkl";
+//        String result = "";
+//        try {
+//            result = day21Service.doPartB();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//        Assert.assertEquals(EXPECTED, result);
+//    }
+
    @Test
    public void Day21B() {
-       final int EXPECTED = 0;
-       int result = 0;
+       final String EXPECTED = "phc,spnd,zmsdzh,pdt,fqqcnm,lsgqf,rjc,lzvh";
+       String result = "";
        try {
            result = RunDay21.problem21B();
        } catch (Exception e) {

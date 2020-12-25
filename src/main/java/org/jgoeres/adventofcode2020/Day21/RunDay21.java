@@ -14,10 +14,10 @@ public abstract class RunDay21 {
         return result;
     }
 
-    public static int problem21B() {
+    public static String problem21B() {
         System.out.println("=== DAY 21B ===");
 
-        int result = day21Service.doPartB();
+        String result = day21Service.doPartB();
 
         System.out.println("Day 21B: Answer = " + result);
 
