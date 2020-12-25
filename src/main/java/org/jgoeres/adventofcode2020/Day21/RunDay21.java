@@ -9,7 +9,7 @@ public abstract class RunDay21 {
 
         int result = day21Service.doPartA();
 
-        System.out.println("Day 21A: Answer = " + result);
+        System.out.println("Day 21A: Total # of non-allergen ingredients = " + result);
 
         return result;
     }
