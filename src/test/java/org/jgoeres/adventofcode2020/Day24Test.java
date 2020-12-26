@@ -6,18 +6,18 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class Day24Test {
-    @Test
-    public void Day24AExample1() {
-        Day24Service day24Service = new Day24Service("data/day24/example1.txt");
-        final int EXPECTED = 10;
-        int result = 0;
-        try {
-            result = day24Service.doPartA();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        Assert.assertEquals(EXPECTED, result);
-    }
+//    @Test
+//    public void Day24AExample1() {
+//        Day24Service day24Service = new Day24Service("data/day24/example1.txt");
+//        final int EXPECTED = 10;
+//        int result = 0;
+//        try {
+//            result = day24Service.doPartA();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//        Assert.assertEquals(EXPECTED, result);
+//    }
     
    @Test
    public void Day24A() {
@@ -31,9 +31,22 @@ public class Day24Test {
        Assert.assertEquals(EXPECTED, result);
    }
 
+//    @Test
+//    public void Day24BExample1() {
+//        Day24Service day24Service = new Day24Service("data/day24/example1.txt");
+//        final int EXPECTED = 2208;
+//        int result = 0;
+//        try {
+//            result = day24Service.doPartB();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//        Assert.assertEquals(EXPECTED, result);
+//    }
+
    @Test
    public void Day24B() {
-       final int EXPECTED = 0;
+       final int EXPECTED = 4206;
        int result = 0;
        try {
            result = RunDay24.problem24B();

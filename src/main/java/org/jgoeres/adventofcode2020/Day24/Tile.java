@@ -18,6 +18,7 @@ public class Tile {
     private Side side = WHITE;  // Everybody starts out white
     private XYPoint location;
     private HashMap<DirectionHexPointy, Tile> neighbors = new HashMap<>();
+    public boolean shouldFlip = false;
 
     public Tile(XYPoint xy) {
         location = xy;
@@ -42,9 +43,39 @@ public class Tile {
         }
     }
 
+    public boolean hasNeighbor(DirectionHexPointy direction) {
+        return (neighbors.containsKey(direction));
+    }
+
     public void flip() {
         if (side == WHITE) side = BLACK;
         else if (side == BLACK) side = WHITE;
+
+        shouldFlip = false;
+    }
+
+    public void calculateShouldFlip() {
+        int count = countNeighbors(BLACK);
+        switch (side) {
+            // Any black tile with zero or more than 2 black tiles
+            // immediately adjacent to it is flipped to white.
+            case BLACK:
+                shouldFlip = (count == 0 || count > 2);
+                break;
+            case WHITE:
+                // Any white tile with exactly 2 black tiles immediately
+                // adjacent to it is flipped to black.
+                shouldFlip = (count == 2);
+                break;
+        }
+    }
+
+    private int countNeighbors(Side color) {
+        int count = 0;
+        for (Tile neighbor : neighbors.values()) {
+            count += (neighbor.side == color) ? 1 : 0;
+        }
+        return count;
     }
 
     public Tile getNeighbor(DirectionHexPointy direction) {
@@ -55,6 +86,26 @@ public class Tile {
         Tile neighbor = getOrCreate(neighborXY);
         addNeighbor(neighbor, direction);
         return neighbor;
+    }
+
+    public void fillNeighbors() {
+        // Scan all the neighbors and add any that are missing
+        if (neighbors.size() != 6) {  // quick check to see if we have them all and return if we do
+            for (DirectionHexPointy direction : DirectionHexPointy.values()) {
+                Tile neighbor = getNeighbor(direction); // just "getting" the neighbor creates it.
+                // Having gotten the (new) neighbor, make sure all ITS neighbors are wired up.
+                // But don't *create* any more new tiles here – just wire to existing ones
+                for (DirectionHexPointy neighborDir : DirectionHexPointy.values()) {
+                    XYPoint neighborNeighborXY = neighbor.getLocation().getRelativeLocationHexPointy(neighborDir);
+                    if (floor.containsKey(neighborNeighborXY)) {
+                        // If a tile that WOULD be a neighbor of the neighbor exists
+                        // Wire to it
+                        Tile neighborNeighbor = floor.get(neighborNeighborXY);
+                        neighbor.addNeighbor(neighborNeighbor, neighborDir);
+                    }
+                }
+            }
+        }
     }
 
     public void addNeighbor(Tile neighbor, DirectionHexPointy directionHexPointy) {

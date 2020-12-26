@@ -19,7 +19,7 @@ public abstract class RunDay24 {
 
         int result = day24Service.doPartB();
 
-        System.out.println("Day 24B: Answer = " + result);
+        System.out.println("Day 24B: Number of Black Tiles after 100 Days = " + result);
 
         return result;
     }
