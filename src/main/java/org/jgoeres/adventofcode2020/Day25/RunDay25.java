@@ -13,17 +13,4 @@ public abstract class RunDay25 {
 
         return result;
     }
-
-    public static int problem25B() {
-        System.out.println("=== DAY 25B ===");
-
-        int result = day25Service.doPartB();
-
-        System.out.println("Day 25B: Answer = " + result);
-
-        return result;
-    }
-
-
-
 }

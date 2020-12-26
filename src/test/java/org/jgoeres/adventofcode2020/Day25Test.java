@@ -32,16 +32,4 @@ public class Day25Test {
         // 14239149 too high
         Assert.assertEquals(EXPECTED, result);
     }
-
-    @Test
-    public void Day25B() {
-        final int EXPECTED = 0;
-        int result = 0;
-        try {
-            result = RunDay25.problem25B();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        Assert.assertEquals(EXPECTED, result);
-    }
 }

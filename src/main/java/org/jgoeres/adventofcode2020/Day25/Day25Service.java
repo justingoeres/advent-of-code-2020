@@ -45,13 +45,6 @@ public class Day25Service {
         return result;
     }
 
-    public int doPartB() {
-        int result = 0;
-        /** Put problem implementation here **/
-
-        return result;
-    }
-
     public int findLoopSize(long key, long subject) {
         // To find the loop size for a given key & subject,
         // start with 0 loops and increase until the transformed
