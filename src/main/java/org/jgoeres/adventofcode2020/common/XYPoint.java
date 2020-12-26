@@ -3,6 +3,7 @@ package org.jgoeres.adventofcode2020.common;
 import java.util.Objects;
 
 import static org.jgoeres.adventofcode2020.common.Direction8Way.*;
+import static org.jgoeres.adventofcode2020.common.DirectionHexPointy.*;
 
 public class XYPoint {
     private int x = 0;
@@ -83,6 +84,57 @@ public class XYPoint {
                 return (getRelativeLocation(numSteps, UP).getRelativeLocation(numSteps, Direction8Way.LEFT));
         }
         return null;
+    }
+
+    public XYPoint getRelativeLocationHexPointy(DirectionHexPointy directionHexPointy) {
+        return getRelativeLocationHexPointy(1, directionHexPointy);
+    }
+
+    public XYPoint getRelativeLocationHexPointy(int numSteps, DirectionHexPointy directionHexPointy) {
+        // NE, SE, NW, SW switch based on whether the y-coordinate is odd or even
+
+        switch (directionHexPointy) {
+            case E:
+                return (new XYPoint(getX() + numSteps, getY()));
+            case W:
+                return (new XYPoint(getX() - numSteps, getY()));
+            default:
+                if (getY() % 2 == 0) {
+                    // Y is *EVEN*
+                    switch (directionHexPointy) {
+                        case SE:
+                            // Default positive-Y direction is DOWN
+                            return (new XYPoint(getX() + numSteps, getY() + numSteps));
+                        case NE:
+                            // Default negative-Y direction is UP
+                            return (new XYPoint(getX() + numSteps, getY() - numSteps));
+                        case SW:
+                            // Default positive-Y direction is DOWN
+                            return (new XYPoint(getX(), getY() + numSteps));
+                        case NW:
+                            // Default negative-Y direction is UP
+                            return (new XYPoint(getX(), getY() - numSteps));
+                    }
+                } else {
+                    // Y is *ODD*
+                    switch (directionHexPointy) {
+                        case SE:
+                            // Default positive-Y direction is DOWN
+                            return (new XYPoint(getX(), getY() + numSteps));
+                        case NE:
+                            // Default negative-Y direction is UP
+                            return (new XYPoint(getX(), getY() - numSteps));
+                        case SW:
+                            // Default positive-Y direction is DOWN
+                            return (new XYPoint(getX() - numSteps, getY() + numSteps));
+                        case NW:
+                            // Default negative-Y direction is UP
+                            return (new XYPoint(getX() - numSteps, getY() - numSteps));
+
+                    }
+                }
+        }
+        return null;    // We should never get here
     }
 
     public void moveRelative(int numSteps, DirectionURDL directionURDL) {
