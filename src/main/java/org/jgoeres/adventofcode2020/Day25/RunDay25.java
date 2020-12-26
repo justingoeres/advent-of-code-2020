@@ -4,12 +4,12 @@ public abstract class RunDay25 {
 
     static Day25Service day25Service = new Day25Service();
 
-    public static int problem25A() {
+    public static long problem25A() {
         System.out.println("=== DAY 25A ===");
 
-        int result = day25Service.doPartA();
+        long result = day25Service.doPartA();
 
-        System.out.println("Day 25A: Answer = " + result);
+        System.out.println("Day 25A: Encryption key = " + result);
 
         return result;
     }
