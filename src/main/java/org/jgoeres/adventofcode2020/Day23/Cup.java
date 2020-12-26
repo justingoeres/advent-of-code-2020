@@ -16,6 +16,12 @@ public class Cup {
         prev.next = this;
     }
 
+    public void insertAfter(Cup toInsert) {
+        Cup next = this.getNext();  // store the 'next' cup for a bit
+        this.setNext(toInsert); // put the 'toInsert' cup after this one
+        toInsert.setNext(next); // set the original 'next' cup to be the 'next' of what we inserted
+    }
+
     public void setNext(Cup next) {
         this.next = next;
         // Also set the 'previous' of the next cup

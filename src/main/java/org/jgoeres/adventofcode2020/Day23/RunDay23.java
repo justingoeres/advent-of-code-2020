@@ -5,13 +5,13 @@ public abstract class RunDay23 {
 
     static Day23Service day23Service = new Day23Service();
 
-    public static int problem23A() {
+    public static String problem23A() {
         System.out.println("=== DAY 23A ===");
         final long LIMIT = 100L;
 
-        int result = day23Service.doPartA(LIMIT);
+        String result = day23Service.doPartA(LIMIT);
 
-        System.out.println("Day 23A: Answer = " + result);
+        System.out.println("Day 23A: Final cup arrangement = " + result);
 
         return result;
     }

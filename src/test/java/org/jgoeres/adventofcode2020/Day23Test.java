@@ -10,8 +10,22 @@ public class Day23Test {
     public void Day23AExample1() {
         Day23Service day23Service = new Day23Service("data/day23/example1.txt");
         final long EXAMPLE_LIMIT = 10L;
-        final long EXPECTED = 306L;
-        long result = 0;
+        final String EXPECTED = "92658374";
+        String result="";
+        try {
+            result = day23Service.doPartA(EXAMPLE_LIMIT);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(EXPECTED, result);
+    }
+
+    @Test
+    public void Day23AExample2() {
+        Day23Service day23Service = new Day23Service("data/day23/example1.txt");
+        final long EXAMPLE_LIMIT = 100L;    // Same as Example 1 but 100 iterations
+        final String EXPECTED = "67384529";
+        String result="";
         try {
             result = day23Service.doPartA(EXAMPLE_LIMIT);
         } catch (Exception e) {
@@ -22,8 +36,8 @@ public class Day23Test {
 
     @Test
     public void Day23A() {
-        final int EXPECTED = 0;
-        int result = 0;
+        final String EXPECTED = "32658947";
+        String result = "";
         try {
             result = RunDay23.problem23A();
         } catch (Exception e) {

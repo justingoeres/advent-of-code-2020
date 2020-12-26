@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.jgoeres.adventofcode2020.common.Debug.*;
+
 public class Day23Service {
     private final String DEFAULT_INPUTS_PATH = "data/day23/input.txt";
 
@@ -26,14 +28,18 @@ public class Day23Service {
         loadInputs(pathToFile);
     }
 
-    public int doPartA(long limit) {
-        int result = 0;
+    public String doPartA(long limit) {
         /**
          * After 'limit' moves, what are the labels on the cups AFTER cup 1?
          **/
-        for (int i = 0; i < limit; i++) {
+        for (int i = 1; i <= limit; i++) {
+            debugPrint(DEBUG, "-- move " + i + " --");
             doMove();
         }
+        debugPrint(DEBUG, "-- final --");
+        if (DEBUG) printCups();
+
+        String result = getResultString(cups);
         return result;
     }
 
@@ -64,6 +70,7 @@ public class Day23Service {
          * The crab selects a new current cup: the cup which is immediately clockwise of
          * the current cup.
          **/
+        if (DEBUG) printCups();
 
         removedCups.clear();
         // The crab picks up the THREE CUPS that are immediately clockwise (NEXT) of the current cup.
@@ -73,15 +80,70 @@ public class Day23Service {
         removedCups.add(removeNextCup(current));
         removedCups.add(removeNextCup(current));
 
+        if (DEBUG) {
+            System.out.print("pick up:");
+            for (Cup c : removedCups) {
+                System.out.print(" " + c.getId() + " ");
+            }
+            System.out.println(); // linefeed
+        }
         // The crab selects a destination cup: the cup with a label equal to the current cup's
         // label minus one. If this would select one of the cups that was just picked up, the
         // crab will keep subtracting one until it finds a cup that wasn't just picked up.
-        // TODO: WORKING HERE
-        int destinationLabel = current.getId() - 1;
-
-
         // If at any point in this process the value goes below the lowest value on any cup's
         // label, it wraps around to the highest value on any cup's label instead.
+        int destinationLabel = current.getId() - 1; // start with "current cup minus one"
+        if (destinationLabel == 0) destinationLabel = 9;    // wrap it
+
+        while (removedCups.contains(cups.get(destinationLabel))) {
+            destinationLabel--;  // decrement (if necessary) to find one that WASN'T removed
+            if (destinationLabel == 0) destinationLabel = 9;    // wrap it
+        }
+        Cup destination = cups.get(destinationLabel);
+        debugPrint(DEBUG, "destination: " + destination.getId() + "\n"); // extra linefeed after
+
+        // The crab places the cups it just picked up so that they are immediately clockwise
+        // of the destination cup. They keep the same order as when they were picked up.
+        Cup last = destination; // an anchor for putting down the removed cups
+        for (Cup removed : removedCups) {
+            // Place this cup to the current cup
+            last.insertAfter(removed);
+            last = removed; // anchor to the cup we just placed
+        }
+
+        // The crab selects a new current cup: the cup which is immediately clockwise of
+        //  the current cup.
+        current = current.getNext();
+
+
+    }
+
+    private void printCups() {
+        System.out.print("cups: ");
+        Cup c = current;
+        // Print the cups in order, with parens around the current one.
+        for (int i = 0; i < cups.size(); i++) {
+            System.out.print((c == current ? "(" : " ")
+                    + c.getId()
+                    + (c == current ? ")" : " ")
+            );
+            c = c.getNext();
+        }
+        System.out.println(); // linefeed
+    }
+
+    private String getResultString(HashMap<Integer, Cup> cups) {
+        // Starting after the cup labeled 1, collect the other cups' labels clockwise
+        // into a single string with no extra characters; each number except 1 should
+        // appear exactly once.
+        int START = 1;  // Start from cup #1
+        String result = "";
+        Cup c = cups.get(START).getNext();    // One to the right of the start
+        while (c != cups.get(START)) { // Until we get back to start
+            result += c.getId();
+            c = c.getNext();
+        }
+        return result;
     }
 
     private Cup removeNextCup(Cup cup) {
