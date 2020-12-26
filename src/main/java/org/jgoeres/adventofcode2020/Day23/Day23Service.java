@@ -11,14 +11,14 @@ import static org.jgoeres.adventofcode2020.common.Debug.*;
 
 public class Day23Service {
     private final String DEFAULT_INPUTS_PATH = "data/day23/input.txt";
-
+    private String inputFile;
     private static boolean DEBUG = false;
 
     private ArrayList<Integer> inputList = new ArrayList<>();
     private HashMap<Integer, Cup> cups = new HashMap<>();
-    private Cup current;
+    private ArrayList<Cup> removedCups;
 
-    private ArrayList<Cup> removedCups = new ArrayList<>();
+    private Cup current;
 
     public Day23Service() {
         loadInputs(DEFAULT_INPUTS_PATH);
@@ -43,10 +43,39 @@ public class Day23Service {
         return result;
     }
 
-    public int doPartB() {
-        int result = 0;
-        /** Put problem implementation here **/
+    public long doPartB(long limit) {
+        /**
+         * Determine which two cups will end up immediately clockwise of cup 1.
+         * What do you get if you multiply their labels together?
+         **/
+        final int CUPS_SIZE = 1000000;  // One million cups!
+        reset();    // Reset the cups in case they're messed up from Part A
 
+        Cup prev = current.getPrev();   // the "last" cup in the circle
+        for (int i = cups.size() + 1; i <= CUPS_SIZE; i++) {
+            // Create all the cups, attaching as we go
+            Cup c = new Cup(i); // Create the new cup
+            cups.put(i, c);
+            c.setPrev(prev);  // Attach it to the previous cup
+            prev = c;   // Make the new cup the previous one, and iterate
+        }
+        // Once we finish, link the last cup back to the head (current, as we just reset)
+        current.setPrev(prev);
+
+        for (int i = 1; i <= limit; i++) {
+            debugPrint(DEBUG, "-- move " + i + " --");
+//            if (i % 100000 == 0) System.out.println("Move #" + i);
+            doMove();
+        }
+        debugPrint(DEBUG, "-- final --");
+        if (DEBUG) printCups();
+
+        // Determine which two cups will end up immediately clockwise of cup 1.
+        // What do you get if you multiply their labels together?
+        Cup c1 = cups.get(1).getNext();
+        Cup c2 = c1.getNext();
+
+        long result = (long) c1.getId() * (long) c2.getId();
         return result;
     }
 
@@ -70,15 +99,21 @@ public class Day23Service {
          * The crab selects a new current cup: the cup which is immediately clockwise of
          * the current cup.
          **/
-        if (DEBUG) printCups();
+        if (DEBUG) printAFewCups(15);
 
-        removedCups.clear();
+        if (removedCups == null) {
+            // First time through, removedCups won't exist
+            removedCups = new ArrayList<>();
+            removedCups.add(null); // Make 3 empty spots in it
+            removedCups.add(null);
+            removedCups.add(null);
+        }
         // The crab picks up the THREE CUPS that are immediately clockwise (NEXT) of the current cup.
         // They are removed from the circle; cup spacing is adjusted as necessary to maintain
         // the circle.
-        removedCups.add(removeNextCup(current));
-        removedCups.add(removeNextCup(current));
-        removedCups.add(removeNextCup(current));
+        removedCups.set(0, removeNextCup(current));
+        removedCups.set(1, removeNextCup(current));
+        removedCups.set(2, removeNextCup(current));
 
         if (DEBUG) {
             System.out.print("pick up:");
@@ -93,11 +128,11 @@ public class Day23Service {
         // If at any point in this process the value goes below the lowest value on any cup's
         // label, it wraps around to the highest value on any cup's label instead.
         int destinationLabel = current.getId() - 1; // start with "current cup minus one"
-        if (destinationLabel == 0) destinationLabel = 9;    // wrap it
+        if (destinationLabel == 0) destinationLabel = cups.size();    // wrap it
 
         while (removedCups.contains(cups.get(destinationLabel))) {
             destinationLabel--;  // decrement (if necessary) to find one that WASN'T removed
-            if (destinationLabel == 0) destinationLabel = 9;    // wrap it
+            if (destinationLabel == 0) destinationLabel = cups.size();    // wrap it
         }
         Cup destination = cups.get(destinationLabel);
         debugPrint(DEBUG, "destination: " + destination.getId() + "\n"); // extra linefeed after
@@ -114,8 +149,6 @@ public class Day23Service {
         // The crab selects a new current cup: the cup which is immediately clockwise of
         //  the current cup.
         current = current.getNext();
-
-
     }
 
     private void printCups() {
@@ -123,6 +156,20 @@ public class Day23Service {
         Cup c = current;
         // Print the cups in order, with parens around the current one.
         for (int i = 0; i < cups.size(); i++) {
+            System.out.print((c == current ? "(" : " ")
+                    + c.getId()
+                    + (c == current ? ")" : " ")
+            );
+            c = c.getNext();
+        }
+        System.out.println(); // linefeed
+    }
+
+    private void printAFewCups(int toPrint) {
+        System.out.print("cups: ");
+        Cup c = current;
+        // Print the cups in order, with parens around the current one.
+        for (int i = 0; i < toPrint; i++) {
             System.out.print((c == current ? "(" : " ")
                     + c.getId()
                     + (c == current ? ")" : " ")
@@ -159,8 +206,13 @@ public class Day23Service {
         return removed;
     }
 
+    private void reset() {
+        loadInputs(inputFile); // reload the inputs
+    }
+
     // load inputs line-by-line and apply a regex to extract fields
     private void loadInputs(String pathToFile) {
+        inputFile = pathToFile;
         inputList.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;

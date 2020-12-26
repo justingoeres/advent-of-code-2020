@@ -7,21 +7,22 @@ public abstract class RunDay23 {
 
     public static String problem23A() {
         System.out.println("=== DAY 23A ===");
-        final long LIMIT = 100L;
+        final long ONE_HUNDRED = 100L;
 
-        String result = day23Service.doPartA(LIMIT);
+        String result = day23Service.doPartA(ONE_HUNDRED);
 
         System.out.println("Day 23A: Final cup arrangement = " + result);
 
         return result;
     }
 
-    public static int problem23B() {
+    public static long problem23B() {
         System.out.println("=== DAY 23B ===");
+        final long TEN_MILLION = 10000000L;
 
-        int result = day23Service.doPartB();
+        long result = day23Service.doPartB(TEN_MILLION);
 
-        System.out.println("Day 23B: Answer = " + result);
+        System.out.println("Day 23B: Product of two cups clockwise of cup #1 = " + result);
 
         return result;
     }

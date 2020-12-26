@@ -11,7 +11,7 @@ public class Day23Test {
         Day23Service day23Service = new Day23Service("data/day23/example1.txt");
         final long EXAMPLE_LIMIT = 10L;
         final String EXPECTED = "92658374";
-        String result="";
+        String result = "";
         try {
             result = day23Service.doPartA(EXAMPLE_LIMIT);
         } catch (Exception e) {
@@ -25,7 +25,7 @@ public class Day23Test {
         Day23Service day23Service = new Day23Service("data/day23/example1.txt");
         final long EXAMPLE_LIMIT = 100L;    // Same as Example 1 but 100 iterations
         final String EXPECTED = "67384529";
-        String result="";
+        String result = "";
         try {
             result = day23Service.doPartA(EXAMPLE_LIMIT);
         } catch (Exception e) {
@@ -46,10 +46,24 @@ public class Day23Test {
         Assert.assertEquals(EXPECTED, result);
     }
 
+//    @Test
+//    public void Day23BExample1() {
+//        Day23Service day23Service = new Day23Service("data/day23/example1.txt");
+//        final long EXAMPLE_LIMIT = 10000000L;    // TEN MILLION iterations
+//        final long EXPECTED = 149245887792L;
+//        long result = 0L;
+//        try {
+//            result = day23Service.doPartB(EXAMPLE_LIMIT);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//        Assert.assertEquals(EXPECTED, result);
+//    }
+
     @Test
     public void Day23B() {
-        final int EXPECTED = 0;
-        int result = 0;
+        final long EXPECTED = 683486010900L;
+        long result = 0L;
         try {
             result = RunDay23.problem23B();
         } catch (Exception e) {

@@ -28,6 +28,12 @@ public class Cup {
         next.prev = this;
     }
 
+    public void setPrev(Cup prev) {
+        this.prev = prev;
+        // Also set the 'next' of the previous cup
+        prev.next = this;
+    }
+
     public int getId() {
         return id;
     }
