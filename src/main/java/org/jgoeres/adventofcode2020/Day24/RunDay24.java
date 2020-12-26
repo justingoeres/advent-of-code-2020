@@ -9,7 +9,7 @@ public abstract class RunDay24 {
 
         int result = day24Service.doPartA();
 
-        System.out.println("Day 24A: Answer = " + result);
+        System.out.println("Day 24A: Number of Black Tiles = " + result);
 
         return result;
     }
