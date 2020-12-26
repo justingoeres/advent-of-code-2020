@@ -2,7 +2,6 @@ package org.jgoeres.adventofcode2020.Day22;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -11,9 +10,7 @@ import static org.jgoeres.adventofcode2020.common.Constants.EMPTY;
 public class Day22Service {
     private final String DEFAULT_INPUTS_PATH = "data/day22/input.txt";
 
-    private static boolean DEBUG = false;
-
-    private ArrayList<Integer> inputList = new ArrayList<>();
+    private String inputFile;
 
     public Day22Service() {
         loadInputs(DEFAULT_INPUTS_PATH);
@@ -23,8 +20,8 @@ public class Day22Service {
         loadInputs(pathToFile);
     }
 
-    Queue<Integer> p1Deck = new LinkedList<>();
-    Queue<Integer> p2Deck = new LinkedList<>();
+    LinkedList<Integer> p1Deck = new LinkedList<>();
+    LinkedList<Integer> p2Deck = new LinkedList<>();
 
 
     public long doPartA() {
@@ -52,10 +49,19 @@ public class Day22Service {
         return result;
     }
 
-    public int doPartB() {
-        int result = 0;
-        /** Put problem implementation here **/
+    public long doPartB() {
+        long result = 0;
+        /**
+         * Recursive Combat:
+         *
+         *
+         * **/
 
+        Game game = new Game(0, p1Deck, p2Deck);
+        game.playGame();
+        // We're done! Figure out who won
+        Queue<Integer> winnerDeck = (!p1Deck.isEmpty() ? p1Deck : p2Deck);
+        result = countScore(winnerDeck);
         return result;
     }
 
@@ -82,12 +88,10 @@ public class Day22Service {
             p2Deck.add(p2Card); // P2's card on top
             p2Deck.add(p1Card);
         }
-
         // Game ends when someone's queue is empty
         boolean done = p1Deck.isEmpty() || p2Deck.isEmpty();
         return done;
     }
-
     private long countScore(Queue<Integer> deck) {
         /**
          * The bottom card in their deck is worth the value of the card multiplied by 1,
@@ -106,12 +110,18 @@ public class Day22Service {
         return count;
     }
 
+    public void reset() {
+        // Reset the decks to the initial configuration
+        p1Deck.clear();
+        p2Deck.clear();
+        loadInputs(inputFile);
+    }
+
     // load inputs line-by-line and apply a regex to extract fields
     private void loadInputs(String pathToFile) {
-        inputList.clear();
+        inputFile = pathToFile;
         try (BufferedReader br = new BufferedReader(new FileReader(pathToFile))) {
             String line;
-            Integer nextInt = 0;
             /**
              * Example:
              *  Player 1:

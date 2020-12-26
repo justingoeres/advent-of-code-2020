@@ -33,10 +33,24 @@ public class Day22Test {
        Assert.assertEquals(EXPECTED, result);
    }
 
+
+    @Test
+    public void Day22BExample1() {
+        Day22Service day22Service = new Day22Service("data/day22/example1.txt");
+        final long EXPECTED = 291L;
+        long result = 0;
+        try {
+            result = day22Service.doPartB();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Assert.assertEquals(EXPECTED, result);
+    }
+
    @Test
    public void Day22B() {
-       final int EXPECTED = 0;
-       int result = 0;
+       final int EXPECTED = 29177;
+       long result = 0;
        try {
            result = RunDay22.problem22B();
        } catch (Exception e) {

@@ -9,17 +9,17 @@ public abstract class RunDay22 {
 
         long result = day22Service.doPartA();
 
-        System.out.println("Day 22A: Answer = " + result);
+        System.out.println("Day 22A: Winning player's final score = " + result);
 
         return result;
     }
 
-    public static int problem22B() {
+    public static long problem22B() {
         System.out.println("=== DAY 22B ===");
 
-        int result = day22Service.doPartB();
+        long result = day22Service.doPartB();
 
-        System.out.println("Day 22B: Answer = " + result);
+        System.out.println("Day 22B: Winning player's final score = " + result);
 
         return result;
     }
