@@ -56,7 +56,8 @@ public class Day22Service {
          *
          *
          * **/
-
+        // Reset the decks
+        reset();
         Game game = new Game(0, p1Deck, p2Deck);
         game.playGame();
         // We're done! Figure out who won
@@ -92,6 +93,7 @@ public class Day22Service {
         boolean done = p1Deck.isEmpty() || p2Deck.isEmpty();
         return done;
     }
+
     private long countScore(Queue<Integer> deck) {
         /**
          * The bottom card in their deck is worth the value of the card multiplied by 1,
