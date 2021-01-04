@@ -1,7 +1,9 @@
 package org.jgoeres.adventofcode2020;
 
 import org.jgoeres.adventofcode2020.Day25.Day25Service;
+import org.jgoeres.adventofcode2020.common.ToClipboard;
 import org.junit.jupiter.api.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -30,6 +32,7 @@ public class Day25Test {
         long result = 0;
         try {
             result = day25Service.doPartA();
+            ToClipboard.set(result);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
