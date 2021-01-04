@@ -134,19 +134,14 @@ function main() {
   fi
 
   if [[ -z ${no_templates-} ]]; then
-    # RunDayXXTemplate.java
-    templateFile1=RunDayXXTemplate.java
-    outputFile1=${templateFile1/XXTemplate/$day} # e.g. RunDayXXTemplate.java -> RunDay01Template.java
-    instantiateTemplate "$templateDir/$templateFile1" "$srcDir/$outputFile1"
-
     # DayXXServiceTemplate.java
     templateFile2=DayXXServiceTemplate.java
-    outputFile2=${templateFile2/XXServiceTemplate/"$day"Service} # e.g. RunDayXXTemplate.java -> RunDay01Template.java
+    outputFile2=${templateFile2/XXServiceTemplate/"$day"Service} # e.g. DayXXServiceTemplate.java -> Day01ServiceTemplate.java
     instantiateTemplate "$templateDir/$templateFile2" "$srcDir/$outputFile2"
 
     # DayXXTestTemplate.java
     templateFile3=DayXXTestTemplate.java
-    outputFile3=${templateFile3/XXTestTemplate/"$day"Test} # e.g. RunDayXXTemplate.java -> RunDay01Template.java
+    outputFile3=${templateFile3/XXTestTemplate/"$day"Test} # e.g. DayXXTestTemplate.java -> Day01TestTemplate.java
     instantiateTemplate "$templateDir/$templateFile3" "$testDir/$outputFile3"
   else
     pretty_print "Instantiating templates...$ta_bold  [SKIPPED]" $fg_cyan

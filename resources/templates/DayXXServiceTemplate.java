@@ -6,31 +6,36 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day${AOC_DAY}Service {
-    private final String DEFAULT_INPUTS_PATH = "data/day${AOC_DAY}/input.txt";
-
-    private static boolean DEBUG = false;
+    public boolean DEBUG = false;
 
     private ArrayList<Integer> inputList = new ArrayList<>();
-
-    public Day${AOC_DAY}Service() {
-        loadInputs(DEFAULT_INPUTS_PATH);
-    }
 
     public Day${AOC_DAY}Service(String pathToFile) {
         loadInputs(pathToFile);
     }
 
-    public int doPartA() {
-        int result = 0;
+    public Day${AOC_DAY}Service(String pathToFile, boolean debug) {
+        loadInputs(pathToFile)
+        DEBUG = debug;
+    }
+
+    public long doPartA() {
+        System.out.println("=== DAY ${AOC_DAY}A ===");
+
+        long result = 0;
         /** Put problem implementation here **/
 
+        System.out.println("Day ${AOC_DAY}A: Answer = " + result);
         return result;
     }
 
-    public int doPartB() {
-        int result = 0;
+    public long doPartB() {
+        System.out.println("=== DAY ${AOC_DAY}B ===");
+
+        long result = 0;
         /** Put problem implementation here **/
 
+        System.out.println("Day ${AOC_DAY}B: Answer = " + result);
         return result;
     }
 

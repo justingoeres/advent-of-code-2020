@@ -8,7 +8,7 @@ import java.util.HashSet;
 public class Day25Service {
     private final String DEFAULT_INPUTS_PATH = "data/day25/input.txt";
 
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = true;
 
     private ArrayList<Integer> inputList = new ArrayList<>();
 
